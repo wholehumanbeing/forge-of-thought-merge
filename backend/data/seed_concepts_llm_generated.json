@@ -1,0 +1,1824 @@
+[
+  {
+    "id": "concept_being",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Being",
+      "description": "The state or fact of existing; existence itself. Philosophically, it often refers to the fundamental nature of existence, reality, or substance, representing that which is.",
+      "domain": "Philosophy, Metaphysics, Ontology"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_non_being",
+        "type": "CONTRADICTS",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_existence",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_reality",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_the_absolute",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "thinker_plato",
+        "type": "DISCUSSED_BY",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_non_being",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Non-Being",
+      "description": "The state of not existing; absence or negation of existence. Philosophically, it contrasts with Being and explores concepts like nothingness, potentiality, or the illusory nature of phenomena.",
+      "domain": "Philosophy, Metaphysics, Ontology"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_being",
+        "type": "CONTRADICTS",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_existence",
+        "type": "CONTRADICTS",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_illusion",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_chaos",
+        "type": "RELATED_TO",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_existence",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Existence",
+      "description": "The state or fact of having objective reality or being. It refers to the actuality of things, often contrasted with essence (the fundamental nature or 'whatness' of a thing).",
+      "domain": "Philosophy, Metaphysics, Ontology"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_being",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_reality",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_non_being",
+        "type": "CONTRADICTS",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_matter",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+       {
+        "target_id": "school_stoicism",
+        "type": "DISCUSSED_BY",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_consciousness",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Consciousness",
+      "description": "The state or quality of awareness, encompassing subjective experience, sentience, qualia, and the sense of self. It involves awareness of both internal states and the external world.",
+      "domain": "Philosophy of Mind, Neuroscience, Psychology, Cognitive Science"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_mind",
+        "type": "PART_OF",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_self",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_matter",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_observer_effect",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "school_buddhism",
+        "type": "KEY_CONCEPT_IN",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_mind",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Mind",
+      "description": "The set of cognitive faculties including consciousness, perception, thinking, judgment, language, and memory. Often discussed in relation to the brain and the body, raising the mind-body problem.",
+      "domain": "Philosophy of Mind, Psychology, Cognitive Science"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_consciousness",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_matter",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_self",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_ego",
+        "type": "PART_OF",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_duality",
+        "type": "RELATED_TO",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_matter",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Matter",
+      "description": "Substance that constitutes the observable universe and possesses mass and volume. Along with energy, it forms the basis of all physical phenomena.",
+      "domain": "Physics, Philosophy, Chemistry"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_mind",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_consciousness",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_space",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_spacetime",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_existence",
+        "type": "RELATED_TO",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_causality",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Causality",
+      "description": "The relationship between cause and effect, where one event, process, or state brings about another. It is a fundamental principle for understanding change, interaction, and the sequence of events.",
+      "domain": "Philosophy, Physics, Science"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_determinism",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_time",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_freedom_free_will",
+        "type": "CONTRADICTS",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_emergence",
+        "type": "RELATED_TO",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_time",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Time",
+      "description": "The indefinite continued progress of existence and events in the past, present, and future regarded as a whole. Often conceived as a dimension, its nature (linear, cyclical, absolute, relative) is explored in physics and philosophy.",
+      "domain": "Physics, Philosophy, Metaphysics"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_space",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_spacetime",
+        "type": "PART_OF",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_causality",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_entropy",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "symbol_ouroboros",
+        "type": "ASSOCIATED_WITH",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_space",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Space",
+      "description": "The boundless three-dimensional extent in which objects and events have relative position and direction. Modern physics often combines it with time into the concept of spacetime.",
+      "domain": "Physics, Philosophy, Mathematics"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_time",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_spacetime",
+        "type": "PART_OF",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_matter",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_quantum_entanglement",
+        "type": "RELATED_TO",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_truth",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Truth",
+      "description": "The property of statements, beliefs, or propositions corresponding to reality or fact. Different theories (correspondence, coherence, pragmatic) attempt to define its nature.",
+      "domain": "Philosophy, Epistemology, Logic"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_reality",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_illusion",
+        "type": "CONTRADICTS",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_information",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "thinker_plato",
+        "type": "DISCUSSED_BY",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_reality",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Reality",
+      "description": "The state of things as they actually exist, independent of perception or interpretation. It encompasses all that is real, forming the basis of objective existence.",
+      "domain": "Philosophy, Metaphysics, Ontology"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_truth",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_illusion",
+        "type": "CONTRADICTS",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_being",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_existence",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_observer_effect",
+        "type": "RELATED_TO",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_illusion",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Illusion",
+      "description": "A distortion of sensory perception or a deceptive appearance or belief that misrepresents reality. Studying illusions provides insights into perception, cognition, and the nature of experience.",
+      "domain": "Psychology, Philosophy, Neuroscience"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_reality",
+        "type": "CONTRADICTS",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_truth",
+        "type": "CONTRADICTS",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_consciousness",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_non_being",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+       {
+        "target_id": "school_buddhism",
+        "type": "KEY_CONCEPT_IN",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_freedom_free_will",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Freedom (Free Will)",
+      "description": "The capacity of agents to choose between different possible courses of action without constraint. This concept is central to debates on moral responsibility, determinism, and human agency.",
+      "aliases": [
+        "Free Will"
+      ],
+      "domain": "Philosophy, Ethics, Theology, Law"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_determinism",
+        "type": "CONTRADICTS",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_causality",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_consciousness",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "school_stoicism",
+        "type": "DISCUSSED_BY",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_determinism",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Determinism",
+      "description": "The philosophical view that all events are necessitated by antecedent causes and conditions together with the laws of nature. It implies that, given the initial conditions, only one future is possible.",
+      "domain": "Philosophy, Physics, Theology"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_freedom_free_will",
+        "type": "CONTRADICTS",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_causality",
+        "type": "BASED_ON_AXIOM",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_time",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "school_stoicism",
+        "type": "KEY_CONCEPT_IN",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_the_absolute",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "The Absolute",
+      "description": "A philosophical and theological term for the ultimate, self-sufficient, and unconditioned reality. It often signifies a perfect, complete, and transcendent principle or being beyond all dualities.",
+      "domain": "Philosophy, Metaphysics, Theology, Spirituality"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_being",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_duality",
+        "type": "CONTRADICTS",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_non_duality",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_reality",
+        "type": "RELATED_TO",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_duality",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Duality",
+      "description": "The state of having two distinct parts, elements, or principles, often in opposition (e.g., mind/body, good/evil). It refers to systems explaining phenomena via two fundamental, contrasting forces.",
+      "domain": "Philosophy, Religion, Metaphysics"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_non_duality",
+        "type": "CONTRADICTS",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_mind",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_matter",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_order",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_chaos",
+        "type": "RELATED_TO",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_non_duality",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Non-Duality",
+      "description": "A state or philosophical perspective positing that apparent dichotomies (like self/other, subject/object) are illusory aspects of an underlying, unified reality. It emphasizes oneness and the interconnectedness of all things.",
+      "aliases": [
+        "Advaita"
+      ],
+      "domain": "Philosophy, Religion (esp. Eastern), Spirituality, Mysticism"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_duality",
+        "type": "CONTRADICTS",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_the_absolute",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_consciousness",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "school_buddhism",
+        "type": "KEY_CONCEPT_IN",
+        "properties": {}
+      },
+      {
+        "target_id": "symbol_ouroboros",
+        "type": "SYMBOLIZES",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_paradox",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Paradox",
+      "description": "A statement or situation that appears self-contradictory or logically unacceptable, yet may prove to be well-founded or true. Paradoxes often challenge assumptions and reveal limits of understanding.",
+      "domain": "Logic, Philosophy, Mathematics, Physics"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_truth",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_duality",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_quantum_entanglement",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "symbol_ouroboros",
+        "type": "RELATED_TO",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_entropy",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Entropy",
+      "description": "A measure of the disorder, randomness, or unavailability of energy within a system. According to the second law of thermodynamics, the total entropy of an isolated system tends to increase over time.",
+      "aliases": [
+        "Disorder"
+      ],
+      "domain": "Physics (Thermodynamics), Information Theory, Statistical Mechanics, Chemistry"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_information",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_order",
+        "type": "CONTRADICTS",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_chaos",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_time",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_system",
+        "type": "RELATED_TO",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_information",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Information",
+      "description": "That which conveys meaning, reduces uncertainty, or can be represented as data. It plays a crucial role in communication, computation, physics (related to entropy), and biology (genetics).",
+      "domain": "Information Theory, Computer Science, Physics, Communication Studies, Biology"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_entropy",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_complexity",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_pattern",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_ai",
+        "type": "USES_METAPHOR",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_network",
+        "type": "RELATED_TO",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_complexity",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Complexity",
+      "description": "The property of a system with many interacting components whose aggregate behavior is difficult to predict from the components themselves. Complex systems often exhibit nonlinearity, emergence, and self-organization.",
+      "domain": "Systems Theory, Physics, Biology, Computer Science, Economics"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_emergence",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_system",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_chaos",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_network",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_information",
+        "type": "RELATED_TO",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_emergence",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Emergence",
+      "description": "The arising of novel properties or behaviors in a system that are not present in its individual components. These emergent phenomena result from the interactions between parts at a lower level.",
+      "domain": "Systems Theory, Philosophy of Science, Biology, Physics, Chemistry"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_complexity",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_system",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_consciousness",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_evolution",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_network",
+        "type": "RELATED_TO",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_evolution",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Evolution",
+      "description": "The process of change in the inherited characteristics of biological populations over successive generations, driven by mechanisms like natural selection and genetic drift. More broadly, any gradual development or change.",
+      "domain": "Biology, Science, Anthropology"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_complexity",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_emergence",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_time",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_system",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "symbol_tree_of_life",
+        "type": "USES_METAPHOR",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_quantum_entanglement",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Quantum Entanglement",
+      "description": "A quantum mechanical phenomenon where the states of two or more particles remain linked, regardless of distance. Measuring a property of one particle instantaneously influences the correlated property of the other(s).",
+      "domain": "Physics (Quantum Mechanics)"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_space",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_observer_effect",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_causality",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_paradox",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_non_duality",
+        "type": "RELATED_TO",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_spacetime",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Spacetime",
+      "description": "The unified four-dimensional continuum combining the three dimensions of space and the one dimension of time. In Einstein's relativity, gravity is interpreted as the curvature of spacetime caused by mass and energy.",
+      "domain": "Physics (Relativity), Cosmology"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_space",
+        "type": "INCLUDES",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_time",
+        "type": "INCLUDES",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_matter",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_causality",
+        "type": "RELATED_TO",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_observer_effect",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Observer Effect",
+      "description": "The principle that the act of observing or measuring a system inevitably disturbs it, altering its state. This effect is particularly significant in quantum mechanics, highlighting measurement's active role.",
+      "domain": "Physics (Quantum Mechanics), Philosophy of Science"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_quantum_entanglement",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_consciousness",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_reality",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_information",
+        "type": "RELATED_TO",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_pattern",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Pattern",
+      "description": "A recurring structure, form, or sequence found in nature, behavior, data, or design. Patterns allow for prediction and understanding of underlying principles or rules governing a system, ranging from simple repetitions to complex arrangements.",
+      "aliases": ["Motif", "Sequence", "Structure"]
+    },
+    "relationships": [
+      {
+        "target_id": "concept_information",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_complexity",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_order",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_archetype_general",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_system",
+        "type": "RELATED_TO",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_self",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Self",
+      "description": "An individual's core identity, consciousness, and subjective experience of existence, encompassing awareness of thoughts, feelings, and agency. It is a central concept in psychology and philosophy, representing the integrated whole of the personality, both conscious and unconscious.",
+      "domain": "Psychology, Philosophy"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_consciousness",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_ego",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_shadow_jungian",
+        "type": "PART_OF",
+        "properties": {}
+      },
+      {
+        "target_id": "thinker_jung",
+        "type": "DISCUSSED_BY",
+        "properties": {}
+      },
+      {
+        "target_id": "myth_heros_journey",
+        "type": "RELATED_TO",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_ego",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Ego",
+      "description": "The component of the psyche responsible for dealing with reality, mediating between internal drives (id) and external constraints (superego/world). In Jungian psychology, it represents the center of consciousness, organizing thoughts and perceptions, but is distinct from the total Self.",
+      "domain": "Psychology (Psychoanalysis, Jungian)"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_self",
+        "type": "PART_OF",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_consciousness",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_shadow_jungian",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "thinker_jung",
+        "type": "DISCUSSED_BY",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_shadow_jungian",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Shadow (Jungian Concept)",
+      "description": "A core concept in Jungian psychology representing the unconscious, often repressed aspects of the personality that the conscious ego rejects or denies. It contains unknown or disowned qualities, both negative and potentially positive, whose integration is key to individuation.",
+      "domain": "Psychology (Jungian)",
+      "aliases": ["Jungian Shadow"]
+    },
+    "relationships": [
+      {
+        "target_id": "thinker_jung",
+        "type": "KEY_CONCEPT_IN",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_self",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_ego",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_collective_unconscious",
+        "type": "PART_OF",
+        "properties": {}
+      },
+      {
+        "target_id": "archetype_shadow",
+        "type": "INSTANCE_OF",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_collective_unconscious",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Collective Unconscious",
+      "description": "Proposed by Carl Jung, this is a layer of the unconscious mind shared by all members of a species, containing inherited psychic structures and universal patterns known as archetypes. It forms the basis of common myths, symbols, and instincts across cultures.",
+      "domain": "Psychology (Jungian)"
+    },
+    "relationships": [
+      {
+        "target_id": "thinker_jung",
+        "type": "KEY_CONCEPT_IN",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_archetype_general",
+        "type": "CONTAINS",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_shadow_jungian",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "myth_creation",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+       {
+        "target_id": "symbol_ouroboros",
+        "type": "RELATED_TO",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_archetype_general",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Archetype (General Concept)",
+      "description": "A universally understood symbol, character, theme, or pattern of behavior that serves as a prototype or model. Archetypes represent fundamental human motifs or images arising from the collective unconscious, influencing perception and experience.",
+      "domain": "Psychology, Literature, Mythology",
+      "aliases": ["Universal Pattern", "Prototype"]
+    },
+    "relationships": [
+      {
+        "target_id": "concept_collective_unconscious",
+        "type": "PART_OF",
+        "properties": {}
+      },
+      {
+        "target_id": "thinker_jung",
+        "type": "KEY_CONCEPT_IN",
+        "properties": {}
+      },
+      {
+        "target_id": "archetype_hero",
+        "type": "INSTANCE_OF",
+        "properties": {}
+      },
+      {
+        "target_id": "archetype_trickster",
+        "type": "INSTANCE_OF",
+        "properties": {}
+      },
+      {
+        "target_id": "archetype_shadow",
+        "type": "INSTANCE_OF",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_anxiety",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Anxiety",
+      "description": "An emotion characterized by feelings of tension, worried thoughts, apprehension, and physical changes like increased heart rate. While a natural response to stress, it can become persistent and overwhelming, impacting daily function.",
+      "domain": "Psychology, Medicine"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_grief",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_trauma",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_consciousness",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "school_stoicism",
+        "type": "DISCUSSED_BY",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_grief",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Grief",
+      "description": "A natural, multifaceted response to loss, encompassing emotional suffering, cognitive changes, and physical sensations. It is typically associated with the death of a loved one but can arise from any significant loss.",
+      "domain": "Psychology, Sociology"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_anxiety",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_trauma",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_time",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "school_buddhism",
+        "type": "DISCUSSED_BY",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_trauma",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Trauma",
+      "description": "An emotional and psychological response to a deeply distressing or disturbing event that overwhelms an individual's ability to cope. It can result in lasting adverse effects on functioning, mental health, and physical well-being.",
+      "domain": "Psychology, Medicine"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_anxiety",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_grief",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_shadow_jungian",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+       {
+        "target_id": "concept_consciousness",
+        "type": "RELATED_TO",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "archetype_hero",
+    "type": "ARCHETYPE",
+    "properties": {
+      "name": "Archetype: Hero",
+      "description": "A prominent archetype representing a figure who overcomes significant adversity through courage, strength, or ingenuity, often embarking on a transformative journey. The Hero typically embodies societal ideals and serves a greater purpose.",
+      "domain": "Mythology, Literature, Psychology",
+      "aliases": ["Hero Archetype"]
+    },
+    "relationships": [
+      {
+        "target_id": "concept_archetype_general",
+        "type": "SUBCLASS_OF",
+        "properties": {}
+      },
+      {
+        "target_id": "myth_heros_journey",
+        "type": "KEY_CONCEPT_IN",
+        "properties": {}
+      },
+      {
+        "target_id": "archetype_shadow",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "thinker_jung",
+        "type": "DISCUSSED_BY",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "archetype_trickster",
+    "type": "ARCHETYPE",
+    "properties": {
+      "name": "Archetype: Trickster",
+      "description": "An archetype embodied by characters who use cunning, mischief, and rule-breaking to challenge conventions and disrupt the status quo. Tricksters often act as catalysts for change and operate outside societal norms.",
+      "domain": "Mythology, Literature, Psychology",
+      "aliases": ["Trickster Archetype"]
+    },
+    "relationships": [
+      {
+        "target_id": "concept_archetype_general",
+        "type": "SUBCLASS_OF",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_chaos",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_order",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "thinker_jung",
+        "type": "DISCUSSED_BY",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "archetype_shadow",
+    "type": "ARCHETYPE",
+    "properties": {
+      "name": "Archetype: Shadow",
+      "description": "An archetype personifying the hidden, repressed, or denied aspects of the personality – the 'dark side'. It embodies primitive instincts, desires, and unresolved complexes that the conscious self refuses to acknowledge.",
+      "domain": "Psychology (Jungian), Literature",
+      "aliases": ["Shadow Archetype"]
+    },
+    "relationships": [
+      {
+        "target_id": "concept_archetype_general",
+        "type": "SUBCLASS_OF",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_shadow_jungian",
+        "type": "BASED_ON_AXIOM",
+        "properties": {}
+      },
+      {
+        "target_id": "archetype_hero",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "thinker_jung",
+        "type": "DISCUSSED_BY",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "myth_creation",
+    "type": "MYTH",
+    "properties": {
+      "name": "Myth: Creation",
+      "description": "A symbolic narrative explaining the origins of the universe, the world, life, and humanity within a particular cultural or religious tradition. Creation myths address fundamental existential questions and establish a foundational worldview.",
+      "domain": "Mythology, Religion",
+      "aliases": ["Cosmogony", "Origin Myth"]
+    },
+    "relationships": [
+      {
+        "target_id": "concept_being",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_chaos",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_order",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_collective_unconscious",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "symbol_tree_of_life",
+        "type": "RELATED_TO",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "myth_heros_journey",
+    "type": "MYTH",
+    "properties": {
+      "name": "Myth: Hero's Journey",
+      "description": "A common narrative template identified by Joseph Campbell, outlining the stages of a hero's adventure: departure, initiation (trials and tribulations), and return with newfound wisdom or power. It represents a universal pattern of transformation.",
+      "domain": "Mythology, Literature, Psychology",
+      "aliases": ["Monomyth"]
+    },
+    "relationships": [
+      {
+        "target_id": "archetype_hero",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_self",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "thinker_jung",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_pattern",
+        "type": "INSTANCE_OF",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "symbol_ouroboros",
+    "type": "SYMBOL",
+    "properties": {
+      "name": "Symbol: Ouroboros",
+      "description": "An ancient symbol depicting a serpent or dragon consuming its own tail, representing cyclicality, infinity, wholeness, and the integration of opposites. It signifies the eternal cycle of creation and destruction, death and rebirth.",
+      "domain": "Mythology, Alchemy, Psychology"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_non_duality",
+        "type": "SYMBOLIZES",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_time",
+        "type": "SYMBOLIZES",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_paradox",
+        "type": "SYMBOLIZES",
+        "properties": {}
+      },
+      {
+        "target_id": "thinker_jung",
+        "type": "DISCUSSED_BY",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_duality",
+        "type": "SYMBOLIZES",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "symbol_tree_of_life",
+    "type": "SYMBOL",
+    "properties": {
+      "name": "Symbol: Tree of Life",
+      "description": "A widespread symbol across many cultures representing the interconnection of all life, cosmic order, growth, knowledge, and immortality. It often links the heavens, the earth, and the underworld.",
+      "domain": "Mythology, Religion, Philosophy"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_evolution",
+        "type": "SYMBOLIZES",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_order",
+        "type": "SYMBOLIZES",
+        "properties": {}
+      },
+      {
+        "target_id": "myth_creation",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_network",
+        "type": "USES_METAPHOR",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_power",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Power",
+      "description": "The capacity or ability to direct or influence the behavior of others, control resources, or shape the course of events. Power manifests in various forms, including social, political, economic, and personal.",
+      "domain": "Sociology, Politics, Philosophy"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_network",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_system",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_decentralization",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_freedom_free_will",
+        "type": "RELATED_TO",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_network",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Network",
+      "description": "A collection of interconnected nodes (e.g., individuals, computers, organizations) that exchange information, resources, or influence. Networks facilitate communication, distribution, and complex interactions within a larger system.",
+      "domain": "Technology, Sociology, Systems Theory"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_system",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_complexity",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_information",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_decentralization",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "symbol_tree_of_life",
+        "type": "USES_METAPHOR",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_system",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "System",
+      "description": "A set of interacting or interdependent components forming an integrated whole with a defined boundary, structure, purpose, and function. Systems often exhibit emergent properties not present in individual parts.",
+      "domain": "Systems Theory, Biology, Engineering, Sociology"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_complexity",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_emergence",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_network",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_order",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_entropy",
+        "type": "RELATED_TO",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_ai",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "AI (Artificial Intelligence)",
+      "description": "The field of computer science focused on creating systems capable of performing tasks that typically require human intelligence, such as learning, problem-solving, perception, and decision-making. It encompasses various approaches like machine learning and deep learning.",
+      "domain": "Computer Science, Technology",
+      "aliases": ["Artificial Intelligence"]
+    },
+    "relationships": [
+      {
+        "target_id": "concept_information",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_complexity",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_mind",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_consciousness",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+       {
+        "target_id": "concept_pattern",
+        "type": "USES_METAPHOR",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_decentralization",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Decentralization",
+      "description": "The process of distributing power, control, functions, or resources away from a central authority or location. It aims to increase autonomy, resilience, and efficiency in organizations, governance, or technological systems like blockchain.",
+      "domain": "Politics, Technology, Management, Economics"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_network",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_power",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_system",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_chaos",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_order",
+        "type": "RELATED_TO",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_order",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Order",
+      "description": "A state characterized by arrangement, structure, predictability, lawfulness, or harmonious functioning according to established rules or principles. Order represents stability, coherence, and intelligibility, often contrasted with chaos.",
+      "domain": "Philosophy, Physics, Sociology, Mythology"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_chaos",
+        "type": "CONTRADICTS",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_entropy",
+        "type": "CONTRADICTS",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_pattern",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_system",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+       {
+        "target_id": "myth_creation",
+        "type": "RELATED_TO",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_chaos",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Chaos",
+      "description": "A state of utter confusion, disorder, unpredictability, or formlessness. In scientific contexts (chaos theory), it refers to the behavior of complex systems highly sensitive to initial conditions, appearing random despite underlying deterministic rules.",
+      "domain": "Philosophy, Physics (Chaos Theory), Mythology"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_order",
+        "type": "CONTRADICTS",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_entropy",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_complexity",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_non_being",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "myth_creation",
+        "type": "RELATED_TO",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "thinker_plato",
+    "type": "THINKER",
+    "properties": {
+      "name": "Plato",
+      "description": "An influential ancient Greek philosopher (c. 428-348 BCE), student of Socrates and teacher of Aristotle. He founded the Academy in Athens and wrote numerous philosophical dialogues exploring metaphysics (Theory of Forms), epistemology, ethics, and politics.",
+      "domain": "Philosophy",
+      "aliases": ["Platon"]
+    },
+    "relationships": [
+      {
+        "target_id": "concept_being",
+        "type": "DISCUSSED_BY",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_truth",
+        "type": "DISCUSSED_BY",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_reality",
+        "type": "DISCUSSED_BY",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_the_absolute",
+        "type": "DISCUSSED_BY",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "thinker_jung",
+    "type": "THINKER",
+    "properties": {
+      "name": "Carl Jung",
+      "description": "A Swiss psychiatrist and psychoanalyst (1875-1961) who founded analytical psychology. Key concepts include the collective unconscious, archetypes, individuation, synchronicity, and psychological types, diverging significantly from Freudian psychoanalysis.",
+      "domain": "Psychology (Analytical Psychology)",
+      "aliases": ["Carl Gustav Jung"]
+    },
+    "relationships": [
+      {
+        "target_id": "concept_collective_unconscious",
+        "type": "INFLUENCED_BY",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_archetype_general",
+        "type": "INFLUENCED_BY",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_shadow_jungian",
+        "type": "INFLUENCED_BY",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_self",
+        "type": "DISCUSSED_BY",
+        "properties": {}
+      },
+      {
+        "target_id": "symbol_ouroboros",
+        "type": "DISCUSSED_BY",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "school_stoicism",
+    "type": "SCHOOL_OF_THOUGHT",
+    "properties": {
+      "name": "Stoicism",
+      "description": "A school of Hellenistic philosophy founded by Zeno of Citium, emphasizing virtue, reason, and living in accordance with nature (Logos). Stoics advocate for emotional resilience, self-control, and acceptance of fate ('apatheia') to achieve inner peace (eudaimonia).",
+      "domain": "Philosophy, Ethics"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_determinism",
+        "type": "KEY_CONCEPT_IN",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_freedom_free_will",
+        "type": "DISCUSSED_BY",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_anxiety",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_order",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+       {
+        "target_id": "concept_causality",
+        "type": "DISCUSSED_BY",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "school_buddhism",
+    "type": "SCHOOL_OF_THOUGHT",
+    "properties": {
+      "name": "Buddhism",
+      "description": "A religion and philosophy originating in ancient India, based on the teachings of Siddhartha Gautama (the Buddha). It focuses on understanding suffering (dukkha) and achieving enlightenment (Nirvana) through ethical conduct, mental discipline (meditation), and wisdom (following the Eightfold Path).",
+      "domain": "Religion, Philosophy, Ethics"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_non_duality",
+        "type": "KEY_CONCEPT_IN",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_consciousness",
+        "type": "KEY_CONCEPT_IN",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_illusion",
+        "type": "KEY_CONCEPT_IN",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_grief",
+        "type": "DISCUSSED_BY",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_self",
+        "type": "DISCUSSED_BY",
+        "properties": {}
+      }
+    ]
+  }
+]

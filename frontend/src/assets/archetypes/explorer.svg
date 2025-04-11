@@ -1,0 +1,10 @@
+<svg width="300" height="200" viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
+  <rect width="100%" height="100%" fill="#2a2a2a"/>
+  <g transform="translate(150, 100)">
+    <circle cx="0" cy="0" r="40" fill="none" stroke="#4ecdc4" stroke-width="2"/>
+    <path d="M-20,-20 L20,-20 L0,20 Z" fill="none" stroke="#4ecdc4" stroke-width="2"/>
+    <circle cx="0" cy="0" r="30" fill="none" stroke="#4ecdc4" stroke-width="1" stroke-dasharray="5,5"/>
+    <path d="M-15,-15 L15,-15 M-15,0 L15,0 M-15,15 L15,15" stroke="#4ecdc4" stroke-width="1"/>
+  </g>
+  <text x="150" y="180" text-anchor="middle" fill="#4ecdc4" font-family="Arial" font-size="14">The Explorer</text>
+</svg> 

@@ -1,0 +1,91 @@
+@import url('https://rsms.me/inter/inter.css'); /* Import Inter font */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom base styles */
+@layer base {
+  html {
+    /* Apply Inter font */
+    font-family: theme('fontFamily.sans'); /* Use theme() instead of @apply */
+  }
+
+  /* Light mode defaults (Tailwind handles most, but explicit is fine) */
+  body {
+    /* Use direct CSS values instead of theme() */
+    background-color: white;
+    color: #111827; /* Equivalent to Tailwind's gray-900 */
+  }
+
+  /* Dark mode defaults */
+  html.dark body {
+    /* Replace @apply with direct CSS values */
+    background-color: #1a1a1a; /* dark-bg */
+    color: #e0e0e0;      /* dark-text */
+    /* Optional: Apply texture */
+    /* background-image: url('/path/to/your/texture.png'); */ /* Example if using texture */
+  }
+
+  /* Style React Flow background for dark mode */
+  html.dark .react-flow__background {
+    /* Replace @apply with direct CSS value */
+    background-color: #1a1a1a; /* dark-bg */
+  }
+  html.dark .react-flow__background .react-flow__background-pattern {
+     /* Make dots slightly visible in dark mode */
+    /* @apply fill-dark-border; */ /* Replaced */
+    fill: #444444; /* dark-border */
+  }
+
+  /* Default Edge styles (can be overridden by custom edges) */
+  .react-flow__edge-path {
+    /* @apply stroke-gray-500; */ /* Replaced */
+    stroke: #6b7280; /* gray-500 */
+  }
+  html.dark .react-flow__edge-path {
+    /* @apply stroke-dark-text-secondary; */ /* Replaced */
+    stroke: #a0a0a0; /* dark-text-secondary */
+  }
+
+  /* Selected Edge styles */
+  .react-flow__edge.selected .react-flow__edge-path {
+      /* @apply stroke-accent; */ /* Replaced */
+      stroke: #8b5cf6; /* accent */
+  }
+}
+
+/* Custom component styles (Example: Style scrollbars for dark mode) */
+@layer components {
+  /* Customize scrollbars for webkit browsers */
+  ::-webkit-scrollbar {
+    /* @apply w-2 h-2; */ /* Replaced */
+    width: 0.5rem; /* w-2 */
+    height: 0.5rem; /* h-2 */
+  }
+  ::-webkit-scrollbar-track {
+    /* @apply bg-gray-200 dark:bg-dark-surface rounded; */ /* Replaced */
+    background-color: #e5e7eb; /* bg-gray-200 */
+    border-radius: 0.25rem; /* rounded */
+  }
+  html.dark ::-webkit-scrollbar-track {
+    background-color: #2a2a2a; /* dark:bg-dark-surface */
+  }
+  ::-webkit-scrollbar-thumb {
+    /* @apply bg-gray-400 dark:bg-dark-text-secondary rounded; */ /* Replaced */
+    background-color: #9ca3af; /* bg-gray-400 */
+    border-radius: 0.25rem; /* rounded */
+  }
+  html.dark ::-webkit-scrollbar-thumb {
+    background-color: #a0a0a0; /* dark:bg-dark-text-secondary */
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    /* @apply bg-gray-500 dark:bg-gray-500; */ /* Replaced */
+    background-color: #6b7280; /* bg-gray-500 */
+  }
+  html.dark ::-webkit-scrollbar-thumb:hover {
+    background-color: #6b7280; /* dark:bg-gray-500 */
+  }
+}
+
+/* You can add custom base styles or component styles below if needed */

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        button {
+            padding: 10px 15px;
+            margin: 10px 0;
+            cursor: pointer;
+        }
+        pre {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Forge of Thought API Test</h1>
+    
+    <h2>Test Backend Connection</h2>
+    <button id="testConnection">Test Connection</button>
+    
+    <h2>Test Archetype Selection</h2>
+    <select id="archetypeSelect">
+        <option value="alchemist">The Alchemist</option>
+        <option value="weaver">The Weaver</option>
+        <option value="trickster">The Trickster</option>
+        <option value="explorer">The Explorer</option>
+        <option value="sage">The Sage</option>
+        <option value="synthesist">The Synthesist</option>
+    </select>
+    <button id="selectArchetype">Select Archetype</button>
+    
+    <h3>Response:</h3>
+    <pre id="response">No response yet.</pre>
+    
+    <script>
+        document.getElementById('testConnection').addEventListener('click', async () => {
+            try {
+                const response = await fetch('http://localhost:8000/');
+                const data = await response.json();
+                document.getElementById('response').textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById('response').textContent = `Error: ${error.message}`;
+            }
+        });
+        
+        document.getElementById('selectArchetype').addEventListener('click', async () => {
+            const archetypeId = document.getElementById('archetypeSelect').value;
+            try {
+                const response = await fetch('http://localhost:8000/api/v1/onboarding/select_archetype', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ archetype_id: archetypeId }),
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                document.getElementById('response').textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById('response').textContent = `Error: ${error.message}`;
+            }
+        });
+    </script>
+</body>
+</html> 
