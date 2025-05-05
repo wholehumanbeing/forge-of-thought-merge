@@ -1,15 +1,11 @@
 
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
-import { useRef } from "react";
 
 const Scene3D = () => {
   return (
     <div className="w-full h-full">
-      <Canvas 
-        camera={{ position: [0, 2, 5], fov: 75 }}
-        shadows
-      >
+      <Canvas>
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} />
         <mesh>
