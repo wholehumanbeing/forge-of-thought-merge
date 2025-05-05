@@ -3,7 +3,7 @@ import { useDebounce } from 'use-debounce';
 import { searchConcepts } from '../../services/api';
 import { NodeType, NodeData /*, KnowledgeNodeData, isKnowledgeNodeData */ } from '../../types/api';
 import './ConceptLibraryPanel.css';
-import logger from '../../utils/logger';
+import { logger } from '../../utils/logger';
 
 // Define the structure expected from the API search results
 // Based on backend NodeData: { id, type, label, data: { description }, ki_id }

@@ -10,7 +10,7 @@ from app.db.vector_db_interface import ChromaVectorDB, VectorDBInterface
 from app.services.lineage_mapper import LineageMapper
 from app.services.synthesis_core import SynthesisCore
 from app.services.onboarding_service import OnboardingService
-from app.services.llm_client import LLMClient, MockLLMClient
+from app.services.llm_client import LLMClient, GeminiLLMClient
 
 # Use lru_cache to create singletons for database interfaces and services
 # This avoids reconnecting/reinstantiating on every request
@@ -108,11 +108,26 @@ def get_lineage_mapper() -> LineageMapper:
 
 @lru_cache()
 def get_llm_client() -> LLMClient:
-    """Provides a singleton instance of the LLM Client (Placeholder using MockLLMClient)."""
-    logger.info("Returning MockLLMClient instance.")
-    # Removed inline MockLLMClient definition
-    # Now returning an instance of the imported MockLLMClient
-    return MockLLMClient()
+    """Provides a singleton instance of the LLM Client based on available API keys."""
+    if settings.GEMINI_API_KEY:
+        logger.info("Attempting to initialize GeminiLLMClient.")
+        try:
+            # Use GeminiLLMClient from llm_client.py directly
+            return GeminiLLMClient()
+        except Exception as e:
+            logger.error(f"Failed to initialize GeminiLLMClient: {e}", exc_info=True)
+            # Raise an exception since we want to use Gemini, not fall back to OpenAI
+            raise HTTPException(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail=f"Gemini LLM client configuration error: {str(e)}"
+            )
+
+    # Raise an exception if no API key is available
+    logger.error("No valid LLM API key found. GEMINI_API_KEY environment variable is required.")
+    raise HTTPException(
+        status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+        detail="LLM service is not configured. Please set GEMINI_API_KEY."
+    )
 
 @lru_cache()
 def get_synthesis_core() -> SynthesisCore:

@@ -4,15 +4,17 @@ from typing import List, Dict, Optional
 from fastapi import APIRouter, Depends, HTTPException
 import uuid # For generating frontend IDs if ki_id is missing
 from pydantic import BaseModel  # Add this import
+import asyncio
 
 # Import necessary models and dependencies
-from app.models.onboarding import ArchetypeSelectionRequest # Keep request model
+from app.models.onboarding import ArchetypeSelectionRequest, SeedConcept, ArchetypeSelectionResponse
 from app.models.data_models import NodeData # Use NodeData for response
 from app.models.ki_ontology import NodeType # To assign a default type if needed
 from app.db.knowledge_graph_interface import KnowledgeGraphInterface # Ensure this is imported
 from app.api import dependencies as deps
 from app.models.data_models import NodeData as SchemaNodeData # Corrected import path
 from app.services.onboarding_service import OnboardingService # Ensure this import is present
+from app.services.neo import Neo4j # Assuming Neo4j class is imported from here
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -81,24 +83,43 @@ FALLBACK_ARCHETYPE_NODES = {
 class SeedConceptsResponse(BaseModel):
     seed_concepts: List[SchemaNodeData]
 
-@router.post("/select-archetype", response_model=SeedConceptsResponse)
+# Define the proper request model to match what the frontend is sending
+class ArchetypeSelect(BaseModel):
+    archetype_id: str
+
+@router.post("/select-archetype", response_model=ArchetypeSelectionResponse)
 async def select_archetype(
-    archetype_data: ArchetypeSelectionRequest,
-    kg_interface: KnowledgeGraphInterface = Depends(deps.get_kg_interface),
-    onboarding_service: OnboardingService = Depends(deps.get_onboarding_service),
-) -> SeedConceptsResponse:
+    request: ArchetypeSelectionRequest,
+    kg_interface: KnowledgeGraphInterface = Depends(deps.get_kg_interface)
+):
     """
-    Select an archetype and generate initial seed concepts based on it.
+    Select an archetype and return seed concepts.
     """
+    logger.info(f"Received select-archetype request with archetype_id: {request.archetype_id}")
+    
     try:
-        final_seed_nodes = await onboarding_service.process_archetype_selection(
-            kg_interface=kg_interface,
-            archetype_data=archetype_data
-        )
-        # Wrap the result in the new response model
-        return SeedConceptsResponse(seed_concepts=final_seed_nodes)
+        # Normalize the archetype ID to lowercase for case-insensitive matching
+        archetype_id = request.archetype_id.lower()
+        
+        # Get fallback data for this archetype
+        fallback_nodes = FALLBACK_ARCHETYPE_NODES.get(archetype_id, [])
+        
+        # Create SeedConcept objects from fallback data
+        seed_concepts = []
+        for index, node in enumerate(fallback_nodes):
+            # Create a node with x, y coordinates
+            seed_concept = SeedConcept(
+                id=node["id"],
+                label=node["label"],
+                description=node.get("description", ""),
+                x=100 + (index * 150),  # Simple grid layout
+                y=100
+            )
+            seed_concepts.append(seed_concept)
+        
+        logger.info(f"Returning {len(seed_concepts)} seed concepts for archetype: {archetype_id}")
+        return ArchetypeSelectionResponse(seed_concepts=seed_concepts)
+    
     except Exception as e:
-        # Log the exception details for debugging
-        # Consider using a more specific exception type if possible
-        print(f"Error in select_archetype: {e}")
-        raise HTTPException(status_code=500, detail=str(e)) 
+        logger.error(f"Error in select_archetype: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=f"Error processing archetype selection: {str(e)}")

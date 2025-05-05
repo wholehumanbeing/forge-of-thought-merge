@@ -10,7 +10,8 @@ import {
     KnowledgeNodeData,
     EdgeData,          
     NodeType,           
-    NodeContextData
+    NodeContextData,
+    NodeDTO
 } from '../types/api';
 import { SemanticEdgeType } from '../constants/semanticRelationships'; // Added import for SemanticEdgeType
 // Removed unused types: GraphInput, FullLineageResponse, ConceptInfo, ApiSeedConcept, SynthesisResponse
@@ -55,7 +56,7 @@ function isWrappedSuggestionsResponse(data: unknown): data is WrappedSuggestions
 }
 
 // Retrieve the base URL from environment variables
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api/v1';
 
 console.log(">>> USING API_BASE_URL:", API_BASE_URL); // Add this log
 
@@ -96,7 +97,7 @@ export const invokeSynthesis = async (graph: GraphStructure): Promise<SynthesisR
           source: string;
           target: string;
           semantic_type: SemanticEdgeType | string | null; // Backend expects this top-level
-          data?: Record<string, any>; // Backend expects optional data field
+          data?: Record<string, unknown>; // Backend expects optional data field
       } = {
           id: edge.id,
           source: edge.source,
@@ -105,7 +106,7 @@ export const invokeSynthesis = async (graph: GraphStructure): Promise<SynthesisR
       };
 
       // Prepare the optional 'data' object for the backend
-      const backendData: Record<string, any> = {};
+      const backendData: Record<string, unknown> = {};
 
       // Check if the input edge has a top-level label (as defined in internal FE EdgeData)
       // If so, move it inside the 'data' object for the backend
@@ -184,6 +185,9 @@ export const selectArchetype = async (archetypeId: string): Promise<Node<Knowled
     // Expect the response data to contain seed_concepts array
     const response = await apiClient.post<{ seed_concepts: SeedConcept[] }>(endpoint, { archetype_id: archetypeId });
 
+    // Debug the response
+    console.log("API Response:", JSON.stringify(response.data));
+
     // Validate the response structure
     if (!response.data || !Array.isArray(response.data.seed_concepts)) {
         console.error('Invalid response format from select-archetype endpoint. Expected { seed_concepts: [...] }.', response.data);
@@ -200,21 +204,27 @@ export const selectArchetype = async (archetypeId: string): Promise<Node<Knowled
           console.warn(`Received unknown node type string '${concept.type}' for seed concept ID ${concept.id}. Defaulting to Concept.`);
       }
 
-      return {
+      // IMPORTANT FIX: Explicitly initialize all required fields and ensure the node type is 'knowledgeNode'
+      const node: Node<KnowledgeNodeData> = {
         id: concept.id, // Use ID from the backend
-        position: { x: concept.x ?? (index * 100), y: concept.y ?? 100 }, // Use position or default layout
-        type: 'knowledgeNode', // Use the custom React Flow node type
+        position: { 
+          x: typeof concept.x === 'number' ? concept.x : (index * 150), 
+          y: typeof concept.y === 'number' ? concept.y : 100 
+        },
+        type: 'knowledgeNode', // CRITICAL FIX: Always use 'knowledgeNode' as the node type
         data: {
-          label: concept.label,
-          description: concept.description ?? '',
-          type: nodeType, // Use determined NodeType
-          original_id: concept.original_id, // Map original_id if present
-          concept_source: 'seed', // Mark as seeded
-          created_at: new Date().toISOString(), // Add timestamp
+          label: concept.label || 'Unnamed Concept',
+          description: concept.description || '',
+          type: nodeType,
+          original_id: concept.original_id || concept.id,
+          concept_source: 'seed',
+          created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
-          // Add other KnowledgeNodeData fields if provided by SeedConcept
-        }
+        } as KnowledgeNodeData
       };
+
+      console.log(`[DEBUG] Created node:`, node);
+      return node;
     });
 
     return nodes;
@@ -476,4 +486,43 @@ export const updateEdge = async (edgeId: string, data: Partial<EdgeData>): Promi
   return Promise.resolve();
 };
 
-// --- End Node/Edge CRUD Stubs --- 
+// --- End Node/Edge CRUD Stubs ---
+
+/**
+ * Fetches a random concept from the backend to bootstrap the canvas.
+ * @returns A promise that resolves with a random concept node.
+ * @throws Throws an error if the API request fails.
+ */
+export const getRandomConcept = async (): Promise<NodeDTO> => {
+  try {
+    const response = await apiClient.get<NodeDTO>('/concepts/random');
+    return response.data;
+  } catch (error) {
+    // Runtime check for Axios error structure
+    const isRuntimeAxiosError = 
+      error && 
+      typeof error === 'object' && 
+      'isAxiosError' in error && 
+      (error as Record<string, unknown>).isAxiosError === true;
+
+    if (isRuntimeAxiosError) {
+      // Assert to our specific interface after the runtime check
+      const axiosError = error as AxiosErrorLike;
+      console.error('Error fetching random concept (AxiosError):', axiosError.response?.data || axiosError.message);
+
+      if (axiosError.response?.status === 404) {
+        throw new Error('No concepts found in the database. Please seed the database first.');
+      } else if (axiosError.response) {
+        throw new Error(`API Error: ${axiosError.response.status} - ${JSON.stringify(axiosError.response.data)}`);
+      } else if (axiosError.request) {
+        throw new Error('Network Error: No response received from the server.');
+      } else {
+        throw new Error(`Request Setup Error: ${axiosError.message}`);
+      }
+    } else {
+      // Handle non-Axios errors
+      console.error('An unexpected error occurred:', error);
+      throw new Error(`Unexpected Error: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+}; 

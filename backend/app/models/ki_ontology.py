@@ -18,6 +18,7 @@ class NodeType(enum.Enum):
     AXIOM = "AXIOM"
     METAPHOR = "METAPHOR"
     PARADOX = "PARADOX" # Added based on previous discussions
+    SYNTHESIS = "SYNTHESIS" # Added to support synthesis operations
     NARRATIVE = "NARRATIVE" # Added based on previous discussions
     PATTERN = "PATTERN" # Added based on previous discussions
     # Add any other types required by the comprehensive plan

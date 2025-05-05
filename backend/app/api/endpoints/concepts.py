@@ -6,11 +6,42 @@ import logging
 from app.db.knowledge_graph_interface import Neo4jKnowledgeGraph
 from app.api.dependencies import get_kg_interface
 # Import the new response models
-from app.models.data_models import NodeData, NodeContext
+from app.models.data_models import NodeData, NodeContext, NodeDTO, ConceptOut
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter()
+
+@router.get("/random", response_model=ConceptOut)
+async def get_random_concept(
+    kg_interface: Neo4jKnowledgeGraph = Depends(get_kg_interface)
+):
+    """
+    Get a random concept from the knowledge graph.
+    This is useful for bootstrapping the canvas with an initial node.
+    
+    Returns:
+        NodeDTO: A randomly selected concept from the database
+        
+    Raises:
+        HTTPException: 404 if no concepts exist, 503 if database connection fails
+    """
+    try:
+        logger.info("Fetching random concept")
+        concept = kg_interface.get_random_concept()
+        
+        if not concept:
+            logger.warning("No concepts found in database")
+            raise HTTPException(status_code=404, detail="No concepts found in the database")
+            
+        return concept
+        
+    except ConnectionError as e:
+        logger.error(f"Database connection error retrieving random concept: {e}")
+        raise HTTPException(status_code=503, detail="Database connection failed")
+    except Exception as e:
+        logger.exception(f"Unexpected error fetching random concept: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 @router.get("/search", response_model=List[NodeData])
 def search_concepts_endpoint(

@@ -1,10 +1,11 @@
 import os
+from pathlib import Path
 from pydantic import Field, validator
 from pydantic_settings import BaseSettings
 from dotenv import load_dotenv
 
-# Load .env file variables
-load_dotenv()
+# Load .env file variables with proper path resolution
+load_dotenv(dotenv_path=Path(__file__).resolve().parent.parent.parent / ".env")
 
 class Settings(BaseSettings):
     # Application Settings
@@ -27,9 +28,10 @@ class Settings(BaseSettings):
 
     # LLM API Keys
     # openai_api_key: str = Field(..., env="OPENAI_API_KEY") # Commented out OpenAI key
-    google_api_key: str = os.getenv("GOOGLE_API_KEY", "") # Added Google API key
+    google_api_key: str | None = Field(default=None, env="GOOGLE_API_KEY")
     OPENAI_API_KEY: str = ""
-    GEMINI_API_KEY: str = "" # Add Gemini API Key
+    # Map GOOGLE_API_KEY to GEMINI_API_KEY for compatibility
+    GEMINI_API_KEY: str = os.getenv("GOOGLE_API_KEY", "")
 
     # Optional: Specify embedding function or other Chroma settings if needed
 
@@ -39,11 +41,12 @@ class Settings(BaseSettings):
     #         raise ValueError("OPENAI_API_KEY environment variable must be set.")
     #     return v
 
-    @validator('google_api_key') # Added Google validator
-    def check_google_key(cls, v):
-        if not v:
-            raise ValueError("GOOGLE_API_KEY environment variable must be set.")
-        return v
+    # Removed the Google API key validator to make it optional
+    # @validator('google_api_key')
+    # def check_google_key(cls, v):
+    #     if not v:
+    #         raise ValueError("GOOGLE_API_KEY environment variable must be set.")
+    #     return v
 
     class Config:
         # If you have a .env file, pydantic-settings will load it automatically
@@ -51,11 +54,13 @@ class Settings(BaseSettings):
         env_file = ".env"
         env_file_encoding = 'utf-8'
         case_sensitive = True
+        extra = "ignore"
 
 # Instantiate settings
 settings = Settings() 
 
 # Check for required environment variables
+# Removed GOOGLE_API_KEY from required list
 required = ["NEO4J_URI","NEO4J_USER","NEO4J_PASSWORD","OPENAI_API_KEY"]
 for k in required:
     if not os.getenv(k):

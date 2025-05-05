@@ -263,103 +263,80 @@ class LineageMapper:
                  # Fallback to individual queries if the combined one doesn't exist
                  try:
                      limit_per_type = 3 # Define limit for each type
-
-                     # --- Define Relationship and Node Types for each Category ---
-                     query_configs = [
-                         {
-                             "target_list": key_thinkers,
-                             "neighbor_types": [NodeType.THINKER],
-                             "relationship_types": [RelationshipType.INFLUENCED_BY] # Removed CRITIQUED_BY
-                         },
-                         {
-                             "target_list": key_works,
-                             "neighbor_types": [NodeType.WORK],
-                             "relationship_types": [RelationshipType.RELATED_TO, RelationshipType.DERIVED_FROM]
-                         },
-                         {
-                             "target_list": schools,
-                             "neighbor_types": [NodeType.SCHOOL_OF_THOUGHT],
-                             "relationship_types": [RelationshipType.PART_OF]
-                         },
-                         {
-                             "target_list": epochs,
-                             "neighbor_types": [NodeType.HISTORICAL_CONTEXT],
-                             "relationship_types": [RelationshipType.RELATED_TO]
-                         },
-                         {
-                             "target_list": foundational_concepts,
-                             "neighbor_types": [NodeType.CONCEPT],
-                             "relationship_types": [RelationshipType.BASED_ON_AXIOM, RelationshipType.RELATED_TO]
-                         },
-                     ]
-
                      processed_ids: Set[str] = set() # Track processed IDs across all categories
 
-                     for config in query_configs:
-                         tasks = []
-                         for current_ki_id in seed_list:
-                             # Explicitly create the coroutine object before appending
-                             coro = self.kg_interface.find_related_nodes(\
-                                 node_ki_id=current_ki_id,\
-                                 relationship_types=config["relationship_types"],\
-                                 neighbor_types=config["neighbor_types"],\
-                                 limit=limit_per_type # Apply limit per seed node initially\
-                             )\
-                             # Ensure the coroutine object itself is appended
-                             tasks.append(coro)\
+                     # --- Define Relationship and Node Types for each Category ---
+                     # (Keep definitions for reference if needed later)
+                     thinker_config = {
+                         "target_list": key_thinkers,
+                         "neighbor_types": [NodeType.THINKER],
+                         "relationship_types": [RelationshipType.INFLUENCED_BY] # Removed CRITIQUED_BY
+                     }
+                     # ... (other configs remain for context but are not used in the loop below) ...
 
-                         # Gather results concurrently
-                         # This call assumes 'tasks' now correctly contains awaitable coroutine objects.\
-                         # If the TypeError persists, it likely originates *within* the execution\
-                         # of one of the find_related_nodes coroutines.\
-                         results_nested = await asyncio.gather(*tasks, return_exceptions=True)\
 
-                         # Flatten, filter exceptions, and deduplicate
-                         all_results_raw: List[NodeData] = []
-                         for result in results_nested:
-                             if isinstance(result, Exception):
-                                 logger.error(f"Error fetching related nodes during fallback: {result}", exc_info=result)
-                             elif result: # Check if result is not None or empty list
-                                 all_results_raw.extend(result)
+                     # --- New Simplified Sequential Logic for Thinkers Only ---
+                     logger.info("Executing simplified sequential query for Thinkers.")
+                     key_thinkers = [] # Reset target list
+                     key_works = []
+                     schools = []
+                     epochs = []
+                     foundational_concepts = []
+                     foundational_metaphors = []
 
-                         # Deduplicate based on ki_id, excluding seeds and already processed nodes
-                         deduplicated_nodes: Dict[str, NodeData] = {}
-                         for node in all_results_raw:
-                             if node and node.ki_id and node.ki_id not in deep_lineage_seed_ids and node.ki_id not in processed_ids:
-                                 deduplicated_nodes[node.ki_id] = node
+                     thinker_results_raw: List[NodeData] = []
+                     async for current_ki_id in AsyncIteratorWrapper(seed_list): # Helper needed if seed_list isn't async iterable
+                         try:
+                             logger.debug(f"Querying thinkers related to seed: {current_ki_id}")
+                             results = self.kg_interface.find_related_nodes(
+                                 node_ki_id=current_ki_id,
+                                 relationship_types=thinker_config["relationship_types"],
+                                 neighbor_types=thinker_config["neighbor_types"],
+                                 limit=limit_per_type
+                             )
+                             if results:
+                                 thinker_results_raw.extend(results)
+                         except Exception as loop_error:
+                             logger.error(f"Error fetching thinkers for seed {current_ki_id}: {loop_error}", exc_info=True)
 
-                         # Apply limit *after* deduplication and format
-                         final_nodes = list(deduplicated_nodes.values())[:limit_per_type]
+                     # Deduplicate and limit thinker results
+                     deduplicated_thinkers: Dict[str, NodeData] = {}
+                     for node in thinker_results_raw:
+                         if node and node.ki_id and node.ki_id not in deep_lineage_seed_ids and node.ki_id not in processed_ids:
+                             deduplicated_thinkers[node.ki_id] = node
 
-                         for node_data in final_nodes:
-                             # NOTE: find_related_nodes doesn't return connection_info currently.
-                             # Passing None, contribution logic in _format_as_lineage_item will be generic.
-                             item = self._format_as_lineage_item(node_data, connection_info=None)
-                             if item:
-                                 config["target_list"].append(item)
-                                 processed_ids.add(node_data.ki_id) # Add to processed set
+                     final_thinker_nodes = list(deduplicated_thinkers.values())[:limit_per_type]
 
-                     logger.info(f"Deep lineage trace (fallback queries) found: {len(key_thinkers)} thinkers, {len(key_works)} works, "
-                                 f"{len(schools)} schools, {len(epochs)} epochs, "
-                                 f"{len(foundational_concepts)} concepts.")
+                     # Format final thinker nodes
+                     for node_data in final_thinker_nodes:
+                         item = self._format_as_lineage_item(node_data, connection_info=None) # No connection info from find_related_nodes
+                         if item:
+                             key_thinkers.append(item)
+                             processed_ids.add(node_data.ki_id) # Add to processed set
+
+                     logger.info(f"Deep lineage trace (sequential fallback) found: {len(key_thinkers)} thinkers.")
+                     # Other lists remain empty for now
 
                  except AttributeError as e:
                      logger.error(f"KG Interface missing 'find_related_nodes' method for deep lineage fallback: {e}", exc_info=True)
+                 except Exception as fallback_error: # Catch potential errors in the new logic
+                      logger.error(f"Error during simplified fallback lineage trace: {fallback_error}", exc_info=True)
+
 
             except Exception as e:
                 logger.error(f"Error during deep lineage trace query: {e}", exc_info=True)
                 # Continue with potentially incomplete data
 
-        # --- Structure the output --- 
+        # --- Structure the output ---
         report = LineageReport(
             synthesized_concept_id = synthesis_output.id, # Use correct field name
             direct_parents=direct_parents,
             # Structure according to LineageReport model
-            key_influencers=key_thinkers + key_works,
-            schools_and_epochs=schools + epochs,
+            key_influencers=key_thinkers + key_works, # key_works is []
+            schools_and_epochs=schools + epochs,     # schools and epochs are []
             foundational_elements={
-                "concepts": foundational_concepts,
-                "metaphors": foundational_metaphors,
+                "concepts": foundational_concepts,   # foundational_concepts is []
+                "metaphors": foundational_metaphors, # foundational_metaphors is []
                 # "symbols": foundational_symbols # Symbols not included in example query
                 "symbols": [] # Add if symbols are queried later
             },
@@ -369,6 +346,20 @@ class LineageMapper:
         logger.info(f"Lineage tracing complete for {synthesis_output.id}. Report generated.")
         return report
 
+# Helper class to make a standard list asynchronously iterable
+class AsyncIteratorWrapper:
+    def __init__(self, obj):
+        self._it = iter(obj)
+
+    def __aiter__(self):
+        return self
+
+    async def __anext__(self):
+        try:
+            value = next(self._it)
+        except StopIteration:
+            raise StopAsyncIteration
+        return value
 
 # Remove old implementation
 '''

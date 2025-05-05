@@ -5,20 +5,51 @@ import { SemanticEdgeType } from '../constants/semanticRelationships';
 
 // Enum for Node Types (used in store and components)
 export enum NodeType {
-  Concept = 'concept',
-  Synthesis = 'synthesis',
-  Axiom = 'axiom',
-  Metaphor = 'metaphor',
-  Thinker = 'thinker',
-  School = 'school',
-  Source = 'source',
+  Concept = 'CONCEPT',
+  Synthesis = 'SYNTHESIS',
+  Axiom = 'AXIOM',
+  Metaphor = 'METAPHOR',
+  Thinker = 'THINKER',
+  School = 'SCHOOL_OF_THOUGHT',
+  Source = 'SOURCE',
 }
+
+// DTO interfaces for API communication with backend
+export interface NodeDTO {
+  id: string;
+  label: string;
+  type: NodeType;
+  data: {
+    description?: string;
+    position?: { x: number; y: number };
+    [key: string]: unknown;
+  };
+  ki_id?: string | null;
+}
+
+export interface EdgeDTO {
+  id: string;
+  source: string; 
+  target: string;
+  semantic_type: SemanticEdgeType;
+  data?: {
+    [key: string]: unknown;
+  };
+}
+
+// Backward compatibility type aliases
+export type ConceptOut = NodeDTO;
+export type ApiNodeData = NodeDTO;
 
 // Base data structure for general node properties
 export interface NodeData {
   label: string;
   name?: string; // Add name if used consistently alongside label
   description?: string;
+  updated_at?: string;
+
+  // Optional original ID from external source (e.g., lineage item ID, concept library ID)
+  original_id?: string; // Store the original ID from lineage source if needed for fetching more data
 }
 
 // Extended data structure for nodes managed internally by the store
@@ -32,6 +63,9 @@ export interface KnowledgeNodeData extends NodeData {
     icon?: string;
     concept_source?: 'user_created' | 'synthesized' | 'imported' | 'forked' | string; // Allow specific lineage sources like 'lineage_key_influencers'
 
+    // New: depth for parallax layering (0 = flat, positive = closer to camera)
+    depth?: number;
+
     // Fields for Synthesis Nodes
     synthesisOutput?: SynthesisOutput; // Store the core output data
     lineageReport?: LineageReport; // Store the associated lineage report
@@ -43,16 +77,13 @@ export interface KnowledgeNodeData extends NodeData {
     // Add other fields specific to internal state management if needed
     // e.g., created_at, updated_at if managed client-side for some nodes
     created_at?: string;
-    updated_at?: string;
-
-    // Optional original ID from external source (e.g., lineage item ID, concept library ID)
-    original_id?: string; // Store the original ID from lineage source if needed for fetching more data
 }
 
 // Data structure for custom edge properties (used within Edge<T>)
 export interface EdgeData {
   label?: string; // Optional label visible on the edge
   semantic_type?: SemanticEdgeType | null;
+  internal_type?: string | null; // V2: Added for backend compatibility during synthesis
   created_at?: string;
   updated_at?: string;
 }
@@ -68,9 +99,6 @@ export interface GraphStructure {
       // Add any other KNOWN fields the backend might use from KnowledgeNodeData
       concept_type?: string;
       // Add any other data fields from KnowledgeNodeData that the backend needs
-      // Ensure position is included if the backend needs it for context
-      // position?: { x: number; y: number };
-      // Include ki_id if needed by the backend
       ki_id?: string | null;
      }[];
     // Define the specific fields the backend expects for edges (matching backend EdgeData)
@@ -79,7 +107,8 @@ export interface GraphStructure {
       source: string; // Changed from source_id
       target: string; // Changed from target_id
       semantic_type: SemanticEdgeType | string | null; // Match backend + allow null for potential temp edges
-      data?: Record<string, any>; // Include generic data field as per backend
+      internal_type?: string | null; // V2: Added field
+      data?: { [key: string]: unknown }; // Use generic indexed type instead of any
      }[];
 }
 
@@ -96,20 +125,32 @@ export interface SynthesisOutput {
     // Any other fields directly related to the synthesized concept from backend
 }
 
-// Structure for the lineage information report
-export interface LineageReport {
-    // Use LineageElement union type defined below
+// Define the known categories for lineage
+export interface LineageCategories {
+    direct_parents?: LineageElement[]; // Match backend naming
     key_influencers?: LineageElement[];
     schools_and_epochs?: LineageElement[];
-    foundational_elements?: LineageElement[];
-    // Add other categories if they exist (e.g., key_metaphors, cultural_resonances)
+    foundational_elements?: LineageElement[]; // Assuming backend might provide this flattened or nested
+    semantic_resonances?: LineageElement[]; // Assuming backend might provide this
     // Allow flexible categories using an index signature
     [categoryKey: string]: LineageElement[] | undefined;
+}
+
+// Structure for the lineage information report
+export interface LineageReport {
+    synthesized_concept_id: string; // Match backend naming
+    // Embed the categories within the report
+    categories?: LineageCategories;
+    // Keep direct access for common ones if preferred (redundant but potentially convenient)
+    // direct_parents?: LineageElement[]; 
+    // key_influencers?: LineageElement[];
+    // ... etc ...
 }
 
 // The complete result returned by the synthesis API call, passed to the store
 // This is what the CanvasPage useEffect hook expects in currentSynthesisResult
 export interface SynthesisResult {
+    synthesis_node: ApiNodeData; // Use the API-aligned NodeData structure
     synthesis_output: SynthesisOutput;
     lineage_report?: LineageReport; // Lineage might be optional or processed separately
 }

@@ -7,6 +7,27 @@ from .ki_ontology import NodeType, SemanticEdgeType
 
 # --- API Request/Response Models ---
 
+class NodeDTO(BaseModel):
+    """
+    Represents a node as transferred between frontend and backend APIs.
+    This model is used for consistent communication between layers.
+    """
+    id: str = Field(..., description="Unique identifier for the node.")
+    label: str = Field(..., description="The display name or label of the node.")
+    type: NodeType = Field(..., description="The ontological type of the node.")
+    data: Dict[str, Any] = Field(default_factory=dict, description="Flexible data payload with description, position, etc.")
+    ki_id: Optional[str] = Field(None, description="Optional identifier linking to Knowledge Infrastructure.")
+
+class EdgeDTO(BaseModel):
+    """
+    Represents an edge connecting two nodes in API communications.
+    """
+    id: str = Field(..., description="Unique identifier for the edge.")
+    source: str = Field(..., description="The ID of the source node.")
+    target: str = Field(..., description="The ID of the target node.")
+    semantic_type: SemanticEdgeType = Field(..., description="The semantic meaning of the connection.")
+    data: Optional[Dict[str, Any]] = Field(None, description="Optional data payload for the edge.")
+
 class NodeData(BaseModel):
     """
     Represents a node as transferred between frontend and backend,
@@ -28,6 +49,9 @@ class EdgeData(BaseModel):
     target: str = Field(..., description="The ID of the target node.")
     semantic_type: SemanticEdgeType = Field(..., description="The user-defined semantic meaning of the connection.")
     data: Optional[Dict[str, Any]] = Field(None, description="Optional data payload for the edge (e.g., user notes, confidence).")
+
+# Alias NodeDTO to ConceptOut for backward compatibility with existing code
+ConceptOut = NodeDTO
 
 class GraphStructure(BaseModel):
     """

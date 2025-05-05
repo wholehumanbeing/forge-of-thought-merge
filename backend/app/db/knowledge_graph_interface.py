@@ -2,6 +2,7 @@ import json
 import logging
 from abc import ABC, abstractmethod
 from typing import List, Dict, Any, Optional, Union
+import uuid
 
 from neo4j import GraphDatabase, Driver
 from neo4j.exceptions import Neo4jError
@@ -9,7 +10,7 @@ from fastapi.concurrency import run_in_threadpool
 
 # Updated imports to use new models and config
 from app.core.config import settings
-from app.models.data_models import NodeData, NodeContext, RelatedNodeInfo, RelevantEdgeInfo
+from app.models.data_models import NodeData, NodeContext, RelatedNodeInfo, RelevantEdgeInfo, NodeDTO
 from app.models.ki_ontology import NodeType, RelationshipType
 
 logger = logging.getLogger(__name__)
@@ -88,6 +89,17 @@ class KnowledgeGraphInterface(ABC):
 
     @abstractmethod
     def find_related_nodes(self, node_ki_id: str, limit: int = 10) -> List[NodeData]:
+        pass
+
+    @abstractmethod
+    def get_random_concept(self) -> Optional[NodeDTO]:
+        """
+        Returns a random concept from the knowledge graph.
+        This is useful for bootstrapping the canvas with an initial node.
+        
+        Returns:
+            NodeDTO: A random concept node, or None if no concepts exist
+        """
         pass
 
 
@@ -442,10 +454,12 @@ class Neo4jKnowledgeGraph(KnowledgeGraphInterface):
             rel_type_values = [rel.value for rel in relationship_types]
             rel_type_str = "r:" + "|".join(rel_type_values)
 
-        match_clause = f"MATCH (start {{ki_id: $ki_id}})-[{rel_type_str}]-(neighbor)"
+        # Modify the MATCH clause to use 'id' and the parameter '$node_ki_id'
+        match_clause = f"MATCH (start {{id: $node_ki_id}})-[{rel_type_str}]-(neighbor)"
 
         where_clauses = ["start <> neighbor"] # Prevent matching the start node itself
-        parameters = {"ki_id": node_ki_id, "limit": limit}
+        # Update the parameter key from 'ki_id' to 'node_ki_id'
+        parameters = {"node_ki_id": node_ki_id, "limit": limit}
 
         if neighbor_types:
             neighbor_labels = [ntype.value for ntype in neighbor_types]
@@ -883,6 +897,58 @@ class Neo4jKnowledgeGraph(KnowledgeGraphInterface):
         except Exception as e:
             logger.error(f"Error getting node type for ki_id {node_ki_id}: {e}", exc_info=True)
             return None
+
+    def get_random_concept(self) -> Optional[NodeDTO]:
+        """
+        Retrieves a random CONCEPT node from the knowledge graph.
+        
+        Returns:
+            NodeDTO: A random concept node formatted as NodeDTO, or None if no concepts exist
+            
+        Raises:
+            ConnectionError: If database connection fails
+        """
+        try:
+            # Ensure connection is available
+            if not self._driver:
+                self._driver = self.get_driver()
+                
+            query = """
+            MATCH (n)
+            WHERE n:CONCEPT OR n:Concept
+            RETURN n
+            ORDER BY rand()
+            LIMIT 1
+            """
+            
+            with self._driver.session() as session:
+                result = session.run(query)
+                record = result.single()
+                
+                if not record:
+                    logger.warning("No concept nodes found in the database")
+                    return None
+                    
+                # Convert Neo4j node to NodeDTO
+                node = record["n"]
+                
+                # Get the node properties - handle potential nulls/missing values
+                properties = dict(node.items())
+                
+                # Construct response with required DTO fields
+                return NodeDTO(
+                    id=properties.get("id", str(uuid.uuid4())),
+                    label=properties.get("label", properties.get("name", "Unnamed Concept")),
+                    type=NodeType.Concept,  # Default to Concept type
+                    data={
+                        "description": properties.get("description", "")
+                    },
+                    ki_id=properties.get("ki_id")
+                )
+                
+        except Exception as e:
+            logger.error(f"Error retrieving random concept: {e}", exc_info=True)
+            raise
 
 # Example usage - can be run if script is executed directly
 # Make sure .env file is present or environment variables are set

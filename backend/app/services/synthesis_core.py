@@ -4,6 +4,7 @@ from collections import Counter, defaultdict
 import logging
 from fastapi import HTTPException, status
 import uuid
+from uuid import uuid4
 
 from app.models.data_models import (
     LineageReport, NodeData, EdgeData, GraphStructure, SynthesisOutput
@@ -83,6 +84,45 @@ class SynthesisCore:
             logger.info("SynthesisCore initialized with KG, VectorDB, and LLMClient.")
         else:
              logger.warning("SynthesisCore initialized with KG and LLMClient. VectorDB is disabled (temporary bypass)." )
+        self._lineage_mapper = LineageMapper(kg_interface) # Assuming LineageMapper only needs KG
+
+    # --- Private Helper Methods ---
+
+    def _build_synthesis_node(self, output_text: str, synthesis_id: Optional[str] = None) -> NodeData:
+        """
+        Creates a default NodeData object for the synthesis result.
+        """
+        # Debug logging
+        logger.debug(f"Building synthesis node with NodeType: {NodeType.__dict__}")
+        
+        node_id = synthesis_id or str(uuid4())
+        # Generate label from the first 6 words, handling short outputs
+        label_words = output_text.split()[:6]
+        label = " ".join(label_words) + ('...' if len(output_text.split()) > 6 else '')
+        if not label: # Handle empty output case
+             label = "Synthesis Result"
+
+        # Use the string value directly instead of the enum
+        try:
+            synthesis_type = NodeType.SYNTHESIS
+            logger.debug(f"Using NodeType.SYNTHESIS: {synthesis_type}")
+        except Exception as e:
+            # Fallback to string if enum access fails
+            logger.error(f"Error accessing NodeType.SYNTHESIS: {str(e)}")
+            synthesis_type = "SYNTHESIS"
+            logger.debug(f"Falling back to string value: {synthesis_type}")
+
+        return NodeData(
+            id=node_id,
+            type=synthesis_type,
+            label=label,
+            data={
+                "description": output_text,
+                "position": {"x": 0, "y": 0}, # Default position, frontend will adjust
+                "is_synthesis_output": True # Flag to identify this node
+            },
+            ki_id=None # Synthesis nodes don't have a direct KI ID initially
+        )
 
     def _analyze_graph(self, graph: GraphStructure) -> GraphAnalysis:
         """
@@ -1080,17 +1120,26 @@ class SynthesisCore:
         logger.debug(f"Constructed LLM prompt of length {len(final_prompt)}")
         return final_prompt
 
-    async def synthesize(self, graph: GraphStructure) -> Tuple[Optional[SynthesisOutput], Optional[str]]:
+    async def synthesize(self, graph: GraphStructure) -> Tuple[Optional[SynthesisOutput], Optional[NodeData], Optional[str]]:
         """
-        Synthesize a new concept from the provided graph structure.
+        Orchestrates the synthesis process by analyzing the input graph, querying knowledge
+        infrastructure, calling the LLM, and processing the result.
         
         Args:
-            graph: The graph structure to synthesize from
+            graph: The input graph structure from the user canvas.
             
         Returns:
-            A tuple containing the synthesis result and an optional error message
+            Tuple of (synthesis_output, synthesis_node, error_message)
         """
-        logger.info(f"Starting synthesis process for graph with {len(graph.nodes)} nodes and {len(graph.edges)} edges")
+        logger.info(f"Starting synthesis process with {len(graph.nodes)} nodes and {len(graph.edges)} edges")
+        
+        # Debug logs for NodeType availability 
+        try:
+            logger.debug(f"Available NodeType values: {[t.name for t in NodeType]}")
+            logger.debug(f"NodeType.SYNTHESIS value: {NodeType.SYNTHESIS}")
+            logger.debug(f"NodeType.SYNTHESIS.value: {NodeType.SYNTHESIS.value}")
+        except Exception as e:
+            logger.error(f"Error checking NodeType enum: {str(e)}")
         
         try:
             # 1. Analyze the graph
@@ -1106,41 +1155,98 @@ class SynthesisCore:
             logger.info("KI query execution complete")
             
             # 4. Construct the LLM prompt
-            prompt = self._construct_llm_prompt(graph, analysis, ki_context)
-            logger.info(f"Constructed LLM prompt of length {len(prompt)}")
+            llm_prompt = self._construct_llm_prompt(graph, analysis, ki_context)
+            logger.info(f"Constructed LLM prompt of length {len(llm_prompt)}")
+
+            # --- Step 5: Generate Synthesis Text with LLM ---
+            logger.info("Generating synthesis text with LLM.")
+            synthesis_text = "" # Initialize synthesis_text
+            try:
+                # Generate the synthesis text using the LLM client
+                # Note: Parameters like model, max_tokens, temperature might be configured
+                # within the LLMClient implementation or passed here if needed.
+                synthesis_text_raw = await self.llm_client.generate_synthesis(prompt=llm_prompt)
+
+                # --- Harden against non-string return types --- Start
+                if not isinstance(synthesis_text_raw, str):
+                    logger.warning(f"LLM returned a non-string type ({type(synthesis_text_raw)}). Attempting conversion.")
+                    try:
+                        synthesis_text = str(synthesis_text_raw)
+                    except Exception as conversion_err:
+                        logger.error(f"Could not convert LLM response to string: {conversion_err}", exc_info=True)
+                        return None, None, f"LLM response conversion failed: {conversion_err}"
+                else:
+                    synthesis_text = synthesis_text_raw
+                # --- Harden against non-string return types --- End
+
+                if not synthesis_text or synthesis_text.strip() == "":
+                    logger.warning("LLM returned empty or whitespace-only synthesis text.")
+                    # Handle potentially blocked content message from Gemini client
+                    if synthesis_text.startswith("Error: Content generation blocked"):
+                         return None, None, synthesis_text # Propagate block message
+                    return None, None, "LLM returned empty synthesis."
+
+                logger.info(f"LLM generation successful. Received {len(synthesis_text)} characters.")
+
+            except Exception as llm_exc:
+                logger.exception("LLM synthesis generation failed.")
+                return None, None, f"LLM Error: {llm_exc}"
+
+            # --- Step 6: Parse LLM Output & Create Synthesis Node ---
+            # (Parsing logic is simplified for now, just use the raw text)
+            # parsed_output = self._parse_llm_output(synthesis_text)
             
-            # 5. Generate the synthesis text using the LLM
-            synthesis_text = await self.llm_client.agenerate_text(prompt)
-            logger.info(f"LLM synthesis text generated: {synthesis_text[:100]}...")
-            
-            # 6. Parse the LLM output
-            parsed_output = self._parse_llm_output(synthesis_text)
-            logger.info(f"Parsed LLM output: Name='{parsed_output['name']}', Desc='{parsed_output['description'][:50]}...'")
-            
-            # 7. Create the SynthesisOutput object
-            synthesis_id = str(uuid.uuid4())
-            created_at = datetime.now().isoformat()
-            
-            output = SynthesisOutput(
+            # For now, just use the raw text as description and generate a simple name
+            synthesis_id = str(uuid4())
+            parsed_output = {
+                "name": "Synthesized: " + (" ".join(synthesis_text.split()[:4])) + "...",
+                "description": synthesis_text,
+                "content": synthesis_text
+            }
+            logger.info(f"Using raw LLM output. Name='{parsed_output['name']}', Desc='{parsed_output['description'][:50]}...'" )
+
+            # --- Step 7: Create Synthesis Output and Node ---
+            # synthesis_id = str(uuid4()) # ID generated above
+            synthesis_output = SynthesisOutput(
                 id=synthesis_id,
-                created_at=created_at,
-                status="success",
-                prompt=prompt,
-                graph_structure=graph,
+                created_at=datetime.now().isoformat(), # Use current time
+                status="success", # Assume success if we got here
+                prompt=llm_prompt,
+                graph_structure=graph, # Include the input graph
                 parent_node_ids=[node.id for node in graph.nodes],
-                analysis=analysis,
-                **parsed_output
+                analysis=analysis, # Include analysis results
+                # Use parsed or generated fields
+                name=parsed_output["name"],
+                description=parsed_output["description"],
+                content=parsed_output["content"],
+                # Add ki_context and llm_output if needed by model
+                ki_context=ki_context, # Include KI context used
+                llm_output=synthesis_text # Store the raw LLM output
             )
+
+            # Create the node data for the frontend
+            # Use the raw text as the description for now
+            synthesis_node = self._build_synthesis_node(output_text=synthesis_text, synthesis_id=synthesis_id)
+            # Update label based on parsed/generated name
+            synthesis_node.label = parsed_output["name"]
+            synthesis_node.data["description"] = parsed_output["content"] # Ensure node data description matches
+
+            # --- Step 8: (Optional) Store Synthesis Output/Node in KI ---
+            # This might involve saving the SynthesisOutput details or creating
+            # a representation of the synthesis_node in Neo4j/ChromaDB.
+            # logger.info(f"Storing synthesis output {synthesis_id} in KI.")
+            # await self._store_synthesis_in_ki(synthesis_output, synthesis_node)
+
+            logger.info(f"Synthesis process completed successfully for ID: {synthesis_id}")
+            return synthesis_output, synthesis_node, None # No error
             
-            logger.info(f"Synthesis successful. Returning SynthesisOutput ID: {output.id}")
-            return output, None
-            
-        # Handle potential errors during the main synthesis steps (analysis, KI queries, LLM call, parsing)
+        except HTTPException as http_exc:
+            logger.error(f"HTTPException during synthesis: {http_exc.detail}", exc_info=True)
+            return None, None, f"Synthesis failed: {http_exc.detail}"
         except Exception as e:
-            logger.exception(f"Error during synthesis process: {e}")
-            error_message = f"An unexpected error occurred during synthesis: {e}"
-            # Return None for output, but include the error message
-            return None, error_message
+            logger.exception("An unexpected error occurred during the main synthesis process.")
+            # Return None for both output and node, plus the error message
+            return None, None, f"An unexpected internal error occurred: {str(e)}"
 
     def _parse_llm_output(self, synthesis_text: str) -> Dict[str, str]:
         """
@@ -1241,13 +1347,6 @@ class SynthesisCore:
         logger.debug(f"Parsed LLM Output: Name='{parsed_output['name']}', Desc='{parsed_output['description'][:50]}...'")
         return parsed_output
 
-    # --- Placeholder methods for future implementation ---
-
-    # def _generate_lineage(self, output: SynthesisOutput, graph: GraphStructure, analysis: GraphAnalysis, context: Dict) -> LineageReport:
-    #     logger.info("Generating lineage report...")
-    #     # Complex implementation involving tracing contributions based on graph, KI context, and potentially LLM reasoning.
-    #     pass
-
     # --- Public Methods ---
 
     def create_synthesis(self, request: GraphStructure) -> SynthesisOutput:
@@ -1258,9 +1357,9 @@ class SynthesisCore:
         graph_structure = request
 
         # Use the main synthesize method
-        synthesis_output, error_message = self.synthesize(graph_structure)
+        synthesis_output, synthesis_node, error_message = self.synthesize(graph_structure)
 
-        if error_message or not synthesis_output:
+        if error_message or not synthesis_output or not synthesis_node:
             logger.error(f"Synthesis process failed: {error_message}")
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
