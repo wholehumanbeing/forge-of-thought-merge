@@ -1,4 +1,5 @@
 import os
+from pydantic import Field, validator
 from pydantic_settings import BaseSettings
 from dotenv import load_dotenv
 
@@ -24,13 +25,38 @@ class Settings(BaseSettings):
     # Add path for persistent client
     CHROMA_DB_PATH: str = os.getenv("CHROMA_DB_PATH", "./chroma_data")
 
+    # LLM API Keys
+    # openai_api_key: str = Field(..., env="OPENAI_API_KEY") # Commented out OpenAI key
+    google_api_key: str = os.getenv("GOOGLE_API_KEY", "") # Added Google API key
+    OPENAI_API_KEY: str = ""
+    GEMINI_API_KEY: str = "" # Add Gemini API Key
+
     # Optional: Specify embedding function or other Chroma settings if needed
+
+    # @validator('openai_api_key') # Commented out OpenAI validator
+    # def check_openai_key(cls, v):
+    #     if not v:
+    #         raise ValueError("OPENAI_API_KEY environment variable must be set.")
+    #     return v
+
+    @validator('google_api_key') # Added Google validator
+    def check_google_key(cls, v):
+        if not v:
+            raise ValueError("GOOGLE_API_KEY environment variable must be set.")
+        return v
 
     class Config:
         # If you have a .env file, pydantic-settings will load it automatically
         # Specify the path if it's not in the root
-        # env_file = ".env"
+        env_file = ".env"
+        env_file_encoding = 'utf-8'
         case_sensitive = True
 
 # Instantiate settings
 settings = Settings() 
+
+# Check for required environment variables
+required = ["NEO4J_URI","NEO4J_USER","NEO4J_PASSWORD","OPENAI_API_KEY"]
+for k in required:
+    if not os.getenv(k):
+        raise RuntimeError(f"Missing env var {k}") 
