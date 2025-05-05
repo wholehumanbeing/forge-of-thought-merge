@@ -1,9 +1,8 @@
-import React, { useEffect, useMemo } from 'react';
-import useCanvasStore, { CanvasState } from '../store/canvasStore';
+import React from 'react';
+import { useInspectorData } from '../hooks/useInspectorData';
 import { Node, Edge } from 'reactflow';
 import { motion, AnimatePresence } from 'framer-motion';
 import { KnowledgeNodeData, EdgeData, NodeContextData, NodeType, LineageReport, RelevantEdgeInfo, RelatedNodeInfo } from '../types/api';
-import { useShallow } from 'zustand/react/shallow';
 import { ALCHEMICAL_EDGES_MAP } from '../constants/semanticRelationships';
 
 // Helper component for loading state
@@ -14,7 +13,7 @@ const LoadingSpinner: React.FC = () => (
   </div>
 );
 
-// Helper component to render node context details (V2: Updated props)
+// Helper component to render node context details
 const NodeContextDisplay: React.FC<{ context: NodeContextData | 'loading' | 'error', kiId: string }> = ({ context, kiId }) => {
   if (context === 'loading' || context === 'error' || !context || typeof context !== 'object') {
      return <p className="text-xs text-gray-500 italic">Context not available or failed to load for {kiId}.</p>;
@@ -97,14 +96,6 @@ const NodeContextDisplay: React.FC<{ context: NodeContextData | 'loading' | 'err
           </div>
         </details>
       )}
-      
-      {/* Raw Data Accordion (Optional) */}
-      {/* <details className="mt-2">
-        <summary className="cursor-pointer text-xs text-gray-500 dark:text-gray-400 flex items-center">Raw Context Data</summary>
-        <pre className="text-xs p-2 mt-1 rounded bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 whitespace-pre-wrap break-all">
-          {JSON.stringify(context, null, 2)}
-        </pre>
-      </details> */} 
     </div>
   );
 };
@@ -127,7 +118,7 @@ const LineageReportDisplay: React.FC<{ lineageReport?: LineageReport }> = ({ lin
         <div key={category}>
           <h5 className="text-xs font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-400">{category.replace(/_/g, ' ')}</h5>
           <ul className="list-disc list-inside ml-4 text-xs space-y-1">
-            {items?.map(item => (
+            {items?.map((item: { id: string; name: string; description?: string; contribution?: string }) => (
               <li key={item.id} title={item.description || item.contribution || 'No details'}>
                 {item.name}
                 {item.contribution && <span className="text-gray-500 text-[10px]">: {item.contribution.substring(0, 50)}...</span>}
@@ -160,64 +151,31 @@ const getTypeColor = (type?: NodeType | string): string => {
 };
 
 const InspectorPanel: React.FC = () => {
-  // V2: Select necessary state slices using useShallow
   const {
-    isInspectorOpen,    // Controls panel visibility
-    selectedNodeId,     // ID of the selected node
-    selectedEdgeId,     // ID of the selected edge
-    nodes,              // Full node list
-    edges,              // Full edge list
-    nodeContextCache,   // Cache for fetched node context
-    isLoadingNodeContext,// Loading state for the *selected* node context
-    closeInspector,     // Action to close the panel
-    setEdgeSemanticType,// Action to update edge type (V2)
-    fetchNodeContext    // Action to fetch node context
-  } = useCanvasStore(
-    useShallow((state: CanvasState) => ({ 
-      isInspectorOpen: state.isInspectorOpen,
-      selectedNodeId: state.selectedNodeId,
-      selectedEdgeId: state.selectedEdgeId,
-      nodes: state.nodes,
-      edges: state.edges,
-      nodeContextCache: state.nodeContextCache,
-      isLoadingNodeContext: state.isLoadingNodeContext,
-      closeInspector: state.closeInspector,
-      setEdgeSemanticType: state.setEdgeSemanticType,
-      fetchNodeContext: state.fetchNodeContext
-    }))
-  );
+    isInspectorOpen,
+    inspectorType,
+    selectedNode,
+    selectedEdge,
+    nodeContextCache,
+    isLoadingNodeContext,
+    closeInspector,
+    setEdgeSemanticType,
+    fetchNodeContext,
+    updateNodeData,
+  } = useInspectorData();
 
-  // Determine the type of content to display based on selection
-  const inspectorType = selectedNodeId ? 'node' : selectedEdgeId ? 'edge' : null;
-
-  // Find the selected node or edge based on ID
-  const selectedNode = useMemo(
-    () => (selectedNodeId ? nodes.find((n: Node<KnowledgeNodeData>) => n.id === selectedNodeId) : null),
-    [selectedNodeId, nodes]
-  );
-
-  const selectedEdge = useMemo(
-    () => (selectedEdgeId ? edges.find((e: Edge<EdgeData>) => e.id === selectedEdgeId) : null),
-    [selectedEdgeId, edges]
-  );
-  
-  // V2: Fetch node context when selectedNodeId changes and has a ki_id
-  useEffect(() => {
+  React.useEffect(() => {
     const kiId = selectedNode?.data?.ki_id;
-    if (selectedNodeId && kiId) {
-      console.debug(`Inspector panel - Node selected: ${selectedNodeId}, KI ID: ${kiId}. Triggering context fetch.`);
-      fetchNodeContext(kiId); // Fetch using ki_id
-    } else if (selectedNodeId) {
-       console.debug(`Inspector panel - Node selected: ${selectedNodeId}, but no KI ID found.`);
-       // Optionally clear context display or show a message
+    if (inspectorType === 'node' && selectedNode && kiId) {
+      fetchNodeContext(kiId);
     }
-  }, [selectedNodeId, selectedNode?.data?.ki_id, fetchNodeContext]); // Depend on ki_id as well
+  }, [inspectorType, selectedNode?.data?.ki_id, selectedNode, fetchNodeContext]);
 
-  // V2: Handle semantic type change for edges
+  // Handle semantic type change for edges
   const handleSemanticTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    if (selectedEdgeId) {
-      const newType = event.target.value as keyof typeof ALCHEMICAL_EDGES_MAP; // Cast to SemanticEdgeType key
-      setEdgeSemanticType(selectedEdgeId, newType);
+    if (selectedEdge) {
+      const newType = event.target.value as keyof typeof ALCHEMICAL_EDGES_MAP;
+      setEdgeSemanticType(selectedEdge.id, newType);
     }
   };
 
@@ -227,13 +185,12 @@ const InspectorPanel: React.FC = () => {
     exit: { x: "100%", opacity: 0 },
   };
 
-  // V2: Updated node details rendering
+  // Node details rendering
   const renderNodeDetails = (node: Node<KnowledgeNodeData>) => {
     const data = node.data;
     const kiId = data?.ki_id;
     const contextStatus = kiId ? nodeContextCache[kiId] : undefined;
     const isContextLoading = isLoadingNodeContext && kiId && (!contextStatus || contextStatus === 'loading');
-
     const isSynthesisNode = data?.type === NodeType.Synthesis;
 
     return (
@@ -247,69 +204,54 @@ const InspectorPanel: React.FC = () => {
             <input
               type="text"
               value={data.label}
-              onChange={(e) => useCanvasStore.getState().updateNodeData(node.id, { label: e.target.value })}
+              onChange={(e) => updateNodeData(node.id, { label: e.target.value })}
               className="ml-1 p-1 border rounded bg-gray-50 dark:bg-dark-input dark:border-dark-border text-sm w-full"
             />
           </p>
         )}
-        {data?.description && (
-            <p><strong>Description:</strong> <span className="text-sm">{data.description}</span></p>
-        )}
-        {data?.concept_type && (
-            <p><strong>Concept Type:</strong> <span className="text-sm">{data.concept_type}</span></p>
-        )}
-        {data?.concept_source && (
-            <p><strong>Source:</strong> <span className="text-sm font-mono text-xs">{data.concept_source}</span></p>
-        )}
-        {data?.created_at && (
-            <p><strong>Created:</strong> <span className="text-xs">{new Date(data.created_at).toLocaleString()}</span></p>
-        )}
-        {data?.updated_at && (
-            <p><strong>Updated:</strong> <span className="text-xs">{new Date(data.updated_at).toLocaleString()}</span></p>
-        )}
+        {data?.description && <p><strong>Description:</strong> <span className="text-sm">{data.description}</span></p>}
+        {data?.concept_type && <p><strong>Concept Type:</strong> <span className="text-sm">{data.concept_type}</span></p>}
+        {data?.concept_source && <p><strong>Source:</strong> <span className="text-sm font-mono text-xs">{data.concept_source}</span></p>}
+        {data?.created_at && <p><strong>Created:</strong> <span className="text-xs">{new Date(data.created_at).toLocaleString()}</span></p>}
+        {data?.updated_at && <p><strong>Updated:</strong> <span className="text-xs">{new Date(data.updated_at).toLocaleString()}</span></p>}
 
-        {/* --- Synthesis Output (if applicable) --- */}
+        {/* Synthesis Output (if applicable) */}
         {isSynthesisNode && data.synthesisOutput && (
           <div className="mt-4 pt-4 border-t border-gray-300 dark:border-dark-border">
-            <h4 className="text-md font-semibold mb-2 text-gray-800 dark:text-dark-text flex items-center">
-              {/* Synthesis Icon */}
-              Synthesis Result
-            </h4>
-            {/* Display synthesis output details, use description field */}
+            <h4 className="text-md font-semibold mb-2 text-gray-800 dark:text-dark-text flex items-center">Synthesis Result</h4>
             <p className="text-xs italic text-gray-600 dark:text-gray-400">{data.synthesisOutput.description || 'No description provided.'}</p>
-            {/* Access lineageReport directly from data, not data.synthesisOutput */}
-             {data.lineageReport && (
-                <details className="mt-2 group">
-                    <summary className="cursor-pointer text-xs font-medium text-gray-700 dark:text-gray-300 mb-1 flex items-center">
-                       <svg className="h-3.5 w-3.5 mr-1 transform transition-transform group-open:rotate-90" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" /></svg>
-                       View Lineage Report
-                    </summary>
-                    <div className="ml-2 mt-1 bg-gray-50 dark:bg-dark-bg-secondary p-2 rounded border border-gray-200 dark:border-dark-border">
-                       <LineageReportDisplay lineageReport={data.lineageReport} />
-                    </div>
-                </details>
+            {data.lineageReport && (
+              <details className="mt-2 group">
+                <summary className="cursor-pointer text-xs font-medium text-gray-700 dark:text-gray-300 mb-1 flex items-center">
+                  <svg className="h-3.5 w-3.5 mr-1 transform transition-transform group-open:rotate-90" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
+                  </svg>
+                  View Lineage Report
+                </summary>
+                <div className="ml-2 mt-1 bg-gray-50 dark:bg-dark-bg-secondary p-2 rounded border border-gray-200 dark:border-dark-border">
+                  <LineageReportDisplay lineageReport={data.lineageReport} />
+                </div>
+              </details>
             )}
           </div>
         )}
 
-        {/* --- Node Context Section (V2: Refined Logic) --- */} 
+        {/* Node Context Section */}
         <div className="mt-4 pt-4 border-t border-gray-300 dark:border-dark-border">
           {!kiId ? (
-             <p className="text-xs text-gray-500 italic">No Knowledge Index ID associated with this node.</p>
+            <p className="text-xs text-gray-500 italic">No Knowledge Index ID associated with this node.</p>
           ) : isContextLoading ? (
             <LoadingSpinner />
           ) : contextStatus === 'error' ? (
-             <p className="text-xs text-red-500 italic">Could not load context from Knowledge Index.</p>
+            <p className="text-xs text-red-500 italic">Could not load context from Knowledge Index.</p>
           ) : contextStatus && typeof contextStatus === 'object' ? (
-            // Render the context display component only if context is valid
             <NodeContextDisplay context={contextStatus} kiId={kiId} />
           ) : (
-             // Catch-all for undefined context after loading attempted (or if not attempted yet but not loading)
-             <p className="text-xs text-gray-500 italic">No detailed context available.</p>
+            <p className="text-xs text-gray-500 italic">No detailed context available.</p>
           )}
         </div>
 
-        {/* --- Raw Data (Debug) --- */} 
+        {/* Raw Data (Debug) */}
         <details className="mt-4 pt-4 border-t border-gray-300 dark:border-dark-border">
           <summary className="cursor-pointer text-xs text-gray-500 dark:text-gray-400">Show Raw Node Data</summary>
           <pre className="text-xs p-2 mt-1 rounded bg-gray-100 dark:bg-dark-surface text-gray-600 dark:text-gray-300 whitespace-pre-wrap break-all">
@@ -320,7 +262,7 @@ const InspectorPanel: React.FC = () => {
     );
   };
 
-  // V2: Updated edge details rendering
+  // Edge details rendering
   const renderEdgeDetails = (edge: Edge<EdgeData>) => {
     const data = edge.data || {};
     const currentType = data.semantic_type;
@@ -332,32 +274,21 @@ const InspectorPanel: React.FC = () => {
         <p><strong>Target:</strong> <span className="font-mono text-xs break-all">{edge.target}</span></p>
 
         <div className="mt-4 pt-4 border-t border-gray-300 dark:border-dark-border">
-           <label htmlFor="semanticTypeSelect" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Semantic Relationship:</label>
-           <select 
-             id="semanticTypeSelect"
-             value={currentType || ''} 
-             onChange={handleSemanticTypeChange}
-             className="block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-           >
-             <option value="" disabled>Select Type...</option>
-             {Object.entries(ALCHEMICAL_EDGES_MAP).map(([typeKey, typeInfo]) => (
-                <option key={typeKey} value={typeKey}>{typeInfo.label} ({typeInfo.categoryLabel})</option>
-             ))}
-           </select>
+          <label htmlFor="semanticTypeSelect" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Semantic Relationship:</label>
+          <select 
+            id="semanticTypeSelect"
+            value={currentType || ''} 
+            onChange={handleSemanticTypeChange}
+            className="block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+          >
+            <option value="" disabled>Select Type...</option>
+            {Object.entries(ALCHEMICAL_EDGES_MAP).map(([typeKey, typeInfo]) => (
+              <option key={typeKey} value={typeKey}>{typeInfo.label} ({typeInfo.categoryLabel})</option>
+            ))}
+          </select>
         </div>
 
-        {/* Optional: Display current label derived from type */} 
-        {data.label && (
-          <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">Current Label: {data.label}</p>
-        )}
-
-        {/* Optional Raw Data Display */}
-        {/* <details className="mt-4">
-          <summary className="cursor-pointer text-xs text-gray-500">Show Raw Edge Data</summary>
-          <pre className="text-xs p-2 mt-1 rounded bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 whitespace-pre-wrap break-all">
-            {JSON.stringify(edge, null, 2)}
-          </pre>
-        </details> */} 
+        {data.label && <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">Current Label: {data.label}</p>}
       </>
     );
   };
