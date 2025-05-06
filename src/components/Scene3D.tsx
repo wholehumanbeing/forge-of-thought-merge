@@ -1,6 +1,9 @@
 
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
+import * as THREE from 'three';
+
+console.log('THREE revision', THREE.REVISION); // Debug to check Three.js version
 
 const Box = () => {
   return (
