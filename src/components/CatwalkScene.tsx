@@ -5,6 +5,7 @@ import useForgeStore from "@/store/useForgeStore";
 import archetypeColors from "@/constants/archetypeColors";
 import { Node, Edge } from "./InstancedNodes";
 import IgniteFab from "./IgniteFab";
+import Toolbar from "./Toolbar";
 import { toast } from "react-hot-toast";
 
 const CatwalkScene = () => {
@@ -166,6 +167,9 @@ const CatwalkScene = () => {
       <div className="absolute top-4 left-4 bg-forge-dark/70 p-2 rounded">
         <h2 className="text-lg text-forge-light">Forge of Thought</h2>
       </div>
+      
+      {/* Add the Toolbar component */}
+      <Toolbar />
       
       {/* Show Ignite FAB only when at least 2 nodes are selected */}
       {selectedNodeIds.length >= 2 && (
