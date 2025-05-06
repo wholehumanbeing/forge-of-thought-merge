@@ -25,6 +25,11 @@ const Scene3D = () => {
         }}
         dpr={[1, 2]} // Responsive pixel ratio
         legacy={false} // Use modern WebGLRenderer features
+        camera={{ position: [0, 0, 5], fov: 45 }}
+        onCreated={({ gl }) => {
+          // Explicit initialization to ensure correct context
+          gl.setClearColor('#101010');
+        }}
       >
         <color attach="background" args={["#101010"]} />
         <ambientLight intensity={0.5} />

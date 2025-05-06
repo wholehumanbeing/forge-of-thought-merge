@@ -23,6 +23,7 @@ export default defineConfig(({ mode }) => ({
     }
   },
   optimizeDeps: {
-    include: ['three']
+    include: ['three'],
+    force: true  // Force re-optimization to clear caching issues
   }
 }));
