@@ -36,7 +36,7 @@ const CatwalkFloor = () => {
         <mesh 
           key={i} 
           ref={ref} 
-          rotation-x={-Math.PI / 2} 
+          rotation={[-Math.PI / 2, 0, 0]} 
           position={[0, 0, i * -1000]}
         >
           <planeGeometry args={[1000, 1000]} />
