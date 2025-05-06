@@ -4,7 +4,7 @@ import { PointerLockControls } from "@react-three/drei";
 import * as THREE from 'three';
 import { useRef } from "react";
 import InstancedNodes from "./InstancedNodes";
-import { Node, Edge } from "./InstancedNodes";
+import { Node, Edge } from "@/store/useForgeStore";
 
 console.log('THREE revision', THREE.REVISION); // Debug to check Three.js version
 

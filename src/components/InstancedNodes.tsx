@@ -1,25 +1,8 @@
-
 import React, { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { useFrame, useThree } from "@react-three/fiber";
 import { Line, Tube } from "@react-three/drei";
-
-export type Node = {
-  id: string;
-  type: string;
-  color: string;
-  pos: [number, number, number];
-  scale?: number;
-};
-
-export type Edge = {
-  id: string;
-  sourceId: string;
-  targetId: string;
-  color: string;
-  midpoint?: [number, number, number];
-  isRay?: boolean;
-};
+import { Node, Edge } from "@/store/useForgeStore";
 
 interface InstancedNodesProps {
   nodes: Node[];
@@ -53,7 +36,6 @@ const InstancedNodes: React.FC<InstancedNodesProps> = ({
     return positions;
   }, [nodes]);
 
-  // Handle raycasting for interaction
   useFrame(() => {
     if (!meshRef.current || nodes.length === 0) return;
     
@@ -130,7 +112,6 @@ const InstancedNodes: React.FC<InstancedNodesProps> = ({
     }
   });
 
-  // Handle mouse events for node selection and edge creation
   useEffect(() => {
     const handleMouseDown = () => {
       if (hovered) {
@@ -163,11 +144,9 @@ const InstancedNodes: React.FC<InstancedNodesProps> = ({
     };
   }, [gl, hovered, dragging, onCreateEdge, onSelectNode]);
 
-  // Get concept nodes (regular sphere nodes) and synthesis nodes (special star nodes)
   const conceptNodes = nodes.filter(node => node.type !== 'synthesis');
   const synthesisNodes = nodes.filter(node => node.type === 'synthesis');
 
-  // Render edges
   const edgeElements = edges.map(edge => {
     // For synthesis rays
     if (edge.isRay && edge.midpoint) {
@@ -223,10 +202,8 @@ const InstancedNodes: React.FC<InstancedNodesProps> = ({
 
   return (
     <>
-      {/* Render edges */}
       {edgeElements}
       
-      {/* Render concept nodes (spheres) */}
       <instancedMesh 
         ref={meshRef} 
         args={[undefined, undefined, Math.max(1, conceptNodes.length)]}
@@ -265,7 +242,6 @@ const InstancedNodes: React.FC<InstancedNodesProps> = ({
         })}
       </instancedMesh>
       
-      {/* Render synthesis nodes (icosahedrons) */}
       {synthesisNodes.length > 0 && (
         <instancedMesh
           ref={synthesisMeshRef}

@@ -3,29 +3,29 @@ import { useEffect, useState } from "react";
 import Scene3D from "./Scene3D";
 import useForgeStore from "@/store/useForgeStore";
 import archetypeColors from "@/constants/archetypeColors";
-import { Node, Edge } from "./InstancedNodes";
+import { Node, Edge } from "@/store/useForgeStore";
 import IgniteFab from "./IgniteFab";
 import Toolbar from "./Toolbar";
 import { toast } from "react-hot-toast";
 
 const CatwalkScene = () => {
-  const { archetypeSymbols } = useForgeStore();
-  const [nodes, setNodes] = useState<Node[]>([]);
-  const [edges, setEdges] = useState<Edge[]>([]);
+  const { archetypeSymbols, nodes, setNodes, edges, setEdges } = useForgeStore();
   const [selectedNodeIds, setSelectedNodeIds] = useState<string[]>([]);
   const [synthesizing, setSynthesizing] = useState(false);
 
   useEffect(() => {
-    // Initialize nodes based on selected archetype symbols
-    const starterNodes = archetypeSymbols.map((symbol, i) => ({
-      id: crypto.randomUUID(),
-      type: 'concept',
-      color: archetypeColors[symbol] || "#FFFFFF",
-      pos: [(i - 1) * 3, 2, -8] as [number, number, number]
-    }));
-    
-    setNodes(starterNodes);
-  }, [archetypeSymbols]);
+    // Only initialize nodes if none exist yet and we have archetype symbols
+    if (nodes.length === 0 && archetypeSymbols.length > 0) {
+      const starterNodes = archetypeSymbols.map((symbol, i) => ({
+        id: crypto.randomUUID(),
+        type: 'concept',
+        color: archetypeColors[symbol] || "#FFFFFF",
+        pos: [(i - 1) * 3, 2, -8] as [number, number, number]
+      }));
+      
+      setNodes(starterNodes);
+    }
+  }, [archetypeSymbols, nodes.length, setNodes]);
 
   // Handle edge creation between nodes
   const handleCreateEdge = (sourceId: string, targetId: string) => {
@@ -43,7 +43,7 @@ const CatwalkScene = () => {
         color: "#49E3F6"
       };
       
-      setEdges(prevEdges => [...prevEdges, newEdge]);
+      setEdges([...edges, newEdge]);
     }
   };
 
@@ -100,7 +100,7 @@ const CatwalkScene = () => {
         isRay: true
       }));
       
-      setEdges(prevEdges => [...prevEdges, ...synthesisRays]);
+      setEdges([...edges, ...synthesisRays]);
 
       // Step 3: Flash and create synthesis node after another delay
       setTimeout(() => {
@@ -114,17 +114,15 @@ const CatwalkScene = () => {
         };
         
         // Add the new node and reset any scaling on original nodes
-        setNodes(prevNodes => [
-          ...prevNodes.map(node => ({ ...node, scale: 1.0 })),
+        setNodes([
+          ...nodes.map(node => ({ ...node, scale: 1.0 })),
           newSynthesisNode
         ]);
         
         // Step 4: Clean up rays and reset selection
         setTimeout(() => {
           // Remove synthesis rays
-          setEdges(prevEdges => 
-            prevEdges.filter(edge => !edge.isRay)
-          );
+          setEdges(edges.filter(edge => !edge.isRay));
           
           // Deselect nodes
           setSelectedNodeIds([]);
@@ -152,7 +150,7 @@ const CatwalkScene = () => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [selectedNodeIds, handleSynthesis]);
+  }, [selectedNodeIds]);
 
   return (
     <div className="w-full h-screen">
@@ -168,10 +166,8 @@ const CatwalkScene = () => {
         <h2 className="text-lg text-forge-light">Forge of Thought</h2>
       </div>
       
-      {/* Add the Toolbar component */}
       <Toolbar />
       
-      {/* Show Ignite FAB only when at least 2 nodes are selected */}
       {selectedNodeIds.length >= 2 && (
         <IgniteFab onClick={handleSynthesis} />
       )}
