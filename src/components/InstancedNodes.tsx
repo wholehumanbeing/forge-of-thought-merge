@@ -94,21 +94,24 @@ const InstancedNodes: React.FC<InstancedNodesProps> = ({
     // Check for hover (unless synthesizing or dragging)
     if (!synthesizing && !dragging) {
       raycaster.setFromCamera(mouse, camera);
-      const intersects = raycaster.intersectObject(meshRef.current);
-      
-      if (intersects.length > 0) {
-        const instanceId = intersects[0].instanceId;
-        if (instanceId !== undefined && instanceId < nodes.filter(n => n.type !== 'synthesis').length) {
-          const hoveredNode = nodes.filter(n => n.type !== 'synthesis')[instanceId];
-          setHovered(hoveredNode.id);
-          gl.domElement.style.cursor = selectedNodeIds.includes(hoveredNode.id) ? 'grab' : 'pointer';
+      const conceptNodes = nodes.filter(n => n.type !== 'synthesis');
+      if (meshRef.current && conceptNodes.length > 0) {
+        const intersects = raycaster.intersectObject(meshRef.current);
+        
+        if (intersects.length > 0) {
+          const instanceId = intersects[0].instanceId;
+          if (instanceId !== undefined && instanceId < conceptNodes.length) {
+            const hoveredNode = conceptNodes[instanceId];
+            setHovered(hoveredNode.id);
+            gl.domElement.style.cursor = selectedNodeIds.includes(hoveredNode.id) ? 'grab' : 'pointer';
+          } else {
+            setHovered(null);
+            gl.domElement.style.cursor = 'auto';
+          }
         } else {
           setHovered(null);
           gl.domElement.style.cursor = 'auto';
         }
-      } else {
-        setHovered(null);
-        gl.domElement.style.cursor = 'auto';
       }
     }
   });
@@ -145,9 +148,11 @@ const InstancedNodes: React.FC<InstancedNodesProps> = ({
     };
   }, [gl, hovered, dragging, onCreateEdge, onSelectNode]);
 
+  // Filter nodes by type
   const conceptNodes = nodes.filter(node => node.type !== 'synthesis');
   const synthesisNodes = nodes.filter(node => node.type === 'synthesis');
 
+  // Prepare edges to render
   const edgeElements = edges.map(edge => {
     // For synthesis rays
     if (edge.isRay && edge.midpoint) {
@@ -201,52 +206,57 @@ const InstancedNodes: React.FC<InstancedNodesProps> = ({
     );
   });
 
+  // Render null for empty edges (to avoid issues with React's array rendering)
+  const filteredEdgeElements = edgeElements.filter(edge => edge !== null);
+
   return (
     <>
-      {edgeElements}
+      {filteredEdgeElements}
       
-      <instancedMesh 
-        ref={meshRef} 
-        args={[undefined, undefined, Math.max(1, conceptNodes.length)]}
-      >
-        <sphereGeometry args={[0.4, 32, 32]} />
-        <meshStandardMaterial />
-        {conceptNodes.map((node, i) => {
-          const matrix = new THREE.Matrix4();
-          const baseScale = node.scale || 1.0;
-          const isHovered = hovered === node.id;
-          const isSelected = selectedNodeIds.includes(node.id);
-          
-          // Apply scaling effects
-          const scaleFactor = baseScale * 
-            (isHovered ? 1.1 : 1.0) * 
-            (isSelected ? 1.15 : 1.0);
-          
-          matrix.compose(
-            new THREE.Vector3(...node.pos),
-            new THREE.Quaternion(),
-            new THREE.Vector3(scaleFactor, scaleFactor, scaleFactor)
-          );
-          
-          if (meshRef.current) {
-            meshRef.current.setMatrixAt(i, matrix);
+      {conceptNodes.length > 0 && (
+        <instancedMesh 
+          ref={meshRef} 
+          args={[undefined, undefined, conceptNodes.length]}
+        >
+          <sphereGeometry args={[0.4, 32, 32]} />
+          <meshStandardMaterial />
+          {conceptNodes.map((node, i) => {
+            const matrix = new THREE.Matrix4();
+            const baseScale = node.scale || 1.0;
+            const isHovered = hovered === node.id;
+            const isSelected = selectedNodeIds.includes(node.id);
             
-            // Set color for this instance
-            const color = new THREE.Color(node.color);
-            meshRef.current.setColorAt(i, color);
-            if (meshRef.current.instanceColor) {
-              meshRef.current.instanceColor.needsUpdate = true;
+            // Apply scaling effects
+            const scaleFactor = baseScale * 
+              (isHovered ? 1.1 : 1.0) * 
+              (isSelected ? 1.15 : 1.0);
+            
+            matrix.compose(
+              new THREE.Vector3(...node.pos),
+              new THREE.Quaternion(),
+              new THREE.Vector3(scaleFactor, scaleFactor, scaleFactor)
+            );
+            
+            if (meshRef.current) {
+              meshRef.current.setMatrixAt(i, matrix);
+              
+              // Set color for this instance
+              const color = new THREE.Color(node.color);
+              meshRef.current.setColorAt(i, color);
+              if (meshRef.current.instanceColor) {
+                meshRef.current.instanceColor.needsUpdate = true;
+              }
             }
-          }
-          
-          return null;
-        })}
-      </instancedMesh>
+            
+            return null;
+          })}
+        </instancedMesh>
+      )}
       
       {synthesisNodes.length > 0 && (
         <instancedMesh
           ref={synthesisMeshRef}
-          args={[undefined, undefined, Math.max(1, synthesisNodes.length)]}
+          args={[undefined, undefined, synthesisNodes.length]}
         >
           <icosahedronGeometry args={[0.6, 1]} />
           <meshStandardMaterial 

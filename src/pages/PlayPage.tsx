@@ -23,6 +23,7 @@ const ErrorFallback = ({ error, resetErrorBoundary }: any) => (
 const PlayPage = () => {
   const { archetypeSymbols, initialized, setInitialized } = useForgeStore();
   const navigate = useNavigate();
+  const [errorCount, setErrorCount] = useState(0);
 
   useEffect(() => {
     // Check localStorage for persisted data
@@ -38,9 +39,14 @@ const PlayPage = () => {
       <ErrorBoundary 
         FallbackComponent={ErrorFallback}
         onReset={() => {
-          // Reset app state if needed
-          window.location.reload();
+          // Reset error count and try again
+          setErrorCount(prev => prev + 1);
+          // Force a clean reload if we've tried too many times
+          if (errorCount >= 3) {
+            window.location.reload();
+          }
         }}
+        resetKeys={[errorCount]}
       >
         <CatwalkScene />
       </ErrorBoundary>

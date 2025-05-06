@@ -36,11 +36,11 @@ const CatwalkFloor = () => {
         <mesh 
           key={i} 
           ref={ref} 
-          rotation={[-Math.PI / 2, 0, 0]} 
           position={[0, 0, i * -1000]}
         >
           <planeGeometry args={[1000, 1000]} />
           <meshStandardMaterial color="#1a1a1f" />
+          <primitive object={new THREE.Euler(-Math.PI / 2, 0, 0)} attach="rotation" />
         </mesh>
       ))}
     </group>
