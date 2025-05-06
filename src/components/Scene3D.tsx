@@ -51,9 +51,19 @@ interface Scene3DProps {
   nodes: Node[];
   edges?: Edge[];
   onCreateEdge?: (sourceId: string, targetId: string) => void;
+  onSelectNode?: (nodeId: string) => void;
+  selectedNodeIds?: string[];
+  synthesizing?: boolean;
 }
 
-const Scene3D = ({ nodes, edges = [], onCreateEdge }: Scene3DProps) => {
+const Scene3D = ({ 
+  nodes, 
+  edges = [], 
+  onCreateEdge, 
+  onSelectNode, 
+  selectedNodeIds = [], 
+  synthesizing = false 
+}: Scene3DProps) => {
   return (
     <div className="w-full h-full">
       <Canvas
@@ -79,6 +89,9 @@ const Scene3D = ({ nodes, edges = [], onCreateEdge }: Scene3DProps) => {
             nodes={nodes} 
             edges={edges}
             onCreateEdge={onCreateEdge}
+            onSelectNode={onSelectNode}
+            selectedNodeIds={selectedNodeIds}
+            synthesizing={synthesizing}
           />
         )}
         <PointerLockControls />
