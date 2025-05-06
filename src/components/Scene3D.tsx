@@ -1,8 +1,9 @@
-
 import { Canvas, useFrame } from "@react-three/fiber";
 import { PointerLockControls } from "@react-three/drei";
 import * as THREE from 'three';
 import { useRef } from "react";
+import InstancedNodes from "./InstancedNodes";
+import { Node } from "./InstancedNodes";
 
 console.log('THREE revision', THREE.REVISION); // Debug to check Three.js version
 
@@ -45,7 +46,11 @@ const CatwalkFloor = () => {
   );
 };
 
-const Scene3D = () => {
+interface Scene3DProps {
+  nodes: Node[];
+}
+
+const Scene3D = ({ nodes }: Scene3DProps) => {
   return (
     <div className="w-full h-full">
       <Canvas
@@ -66,6 +71,7 @@ const Scene3D = () => {
         <ambientLight intensity={0.2} />
         <pointLight position={[10, 10, 10]} />
         <CatwalkFloor />
+        {nodes.length > 0 && <InstancedNodes nodes={nodes} />}
         <PointerLockControls />
       </Canvas>
     </div>
