@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { useFrame, useThree } from "@react-three/fiber";
-import { Line, Tube } from "@react-three/drei";
+import { Tube } from "@react-three/drei";
 import { Node, Edge } from "@/store/useForgeStore";
 
 interface InstancedNodesProps {
@@ -41,15 +41,15 @@ const InstancedNodes: React.FC<InstancedNodesProps> = ({
     if (!meshRef.current || nodes.length === 0) return;
     
     // Reset scales and update for selection/hover states
-    nodes.forEach((node, i) => {
-      if (node.type === 'synthesis') return; // Skip synthesis nodes, they use a different mesh
+    const conceptNodes = nodes.filter(node => node.type !== 'synthesis');
+    conceptNodes.forEach((node, i) => {
+      if (i >= conceptNodes.length || !meshRef.current) return;
       
       const matrix = new THREE.Matrix4();
       // Apply multiple scale factors:
       // - Base scale (default 1.0 or specified in the node)
       // - Hover scale (1.1 if hovered)
       // - Selection scale (1.15 if selected)
-      // - Synthesis animation scale (if applicable)
       let baseScale = node.scale || 1.0;
       const hoverFactor = hovered === node.id ? 1.1 : 1.0;
       const selectionFactor = selectedNodeIds.includes(node.id) ? 1.15 : 1.0;
@@ -62,18 +62,27 @@ const InstancedNodes: React.FC<InstancedNodesProps> = ({
         new THREE.Vector3(finalScale, finalScale, finalScale)
       );
       
-      meshRef.current?.setMatrixAt(i, matrix);
+      meshRef.current.setMatrixAt(i, matrix);
+      
+      // Set color for this instance
+      const color = new THREE.Color(node.color);
+      meshRef.current.setColorAt(i, color);
     });
     
     // Update instance matrix for regular nodes
     if (meshRef.current.instanceMatrix) {
       meshRef.current.instanceMatrix.needsUpdate = true;
     }
+    if (meshRef.current.instanceColor) {
+      meshRef.current.instanceColor.needsUpdate = true;
+    }
 
     // Update synthesis nodes (if any)
-    if (synthesisMeshRef.current) {
-      const synthesisNodes = nodes.filter(node => node.type === 'synthesis');
+    const synthesisNodes = nodes.filter(node => node.type === 'synthesis');
+    if (synthesisMeshRef.current && synthesisNodes.length > 0) {
       synthesisNodes.forEach((node, i) => {
+        if (i >= synthesisNodes.length || !synthesisMeshRef.current) return;
+        
         const matrix = new THREE.Matrix4();
         const scale = node.scale || 1.0;
         
@@ -83,11 +92,18 @@ const InstancedNodes: React.FC<InstancedNodesProps> = ({
           new THREE.Vector3(scale, scale, scale)
         );
         
-        synthesisMeshRef.current?.setMatrixAt(i, matrix);
+        synthesisMeshRef.current.setMatrixAt(i, matrix);
+        
+        // Set color for this instance
+        const color = new THREE.Color(node.color);
+        synthesisMeshRef.current.setColorAt(i, color);
       });
       
-      if (synthesisMeshRef.current.instanceMatrix && synthesisNodes.length > 0) {
+      if (synthesisMeshRef.current.instanceMatrix) {
         synthesisMeshRef.current.instanceMatrix.needsUpdate = true;
+      }
+      if (synthesisMeshRef.current.instanceColor) {
+        synthesisMeshRef.current.instanceColor.needsUpdate = true;
       }
     }
 
@@ -220,36 +236,7 @@ const InstancedNodes: React.FC<InstancedNodesProps> = ({
         >
           <sphereGeometry args={[0.4, 32, 32]} />
           <meshStandardMaterial />
-          {conceptNodes.map((node, i) => {
-            const matrix = new THREE.Matrix4();
-            const baseScale = node.scale || 1.0;
-            const isHovered = hovered === node.id;
-            const isSelected = selectedNodeIds.includes(node.id);
-            
-            // Apply scaling effects
-            const scaleFactor = baseScale * 
-              (isHovered ? 1.1 : 1.0) * 
-              (isSelected ? 1.15 : 1.0);
-            
-            matrix.compose(
-              new THREE.Vector3(...node.pos),
-              new THREE.Quaternion(),
-              new THREE.Vector3(scaleFactor, scaleFactor, scaleFactor)
-            );
-            
-            if (meshRef.current) {
-              meshRef.current.setMatrixAt(i, matrix);
-              
-              // Set color for this instance
-              const color = new THREE.Color(node.color);
-              meshRef.current.setColorAt(i, color);
-              if (meshRef.current.instanceColor) {
-                meshRef.current.instanceColor.needsUpdate = true;
-              }
-            }
-            
-            return null;
-          })}
+          {/* Matrix updates are handled in useFrame */}
         </instancedMesh>
       )}
       
@@ -263,29 +250,7 @@ const InstancedNodes: React.FC<InstancedNodesProps> = ({
             emissive="#F3B248"
             emissiveIntensity={1.5}
           />
-          {synthesisNodes.map((node, i) => {
-            const matrix = new THREE.Matrix4();
-            const scale = node.scale || 1.0;
-            
-            matrix.compose(
-              new THREE.Vector3(...node.pos),
-              new THREE.Quaternion(),
-              new THREE.Vector3(scale, scale, scale)
-            );
-            
-            if (synthesisMeshRef.current) {
-              synthesisMeshRef.current.setMatrixAt(i, matrix);
-              
-              // Set color for this instance
-              const color = new THREE.Color(node.color);
-              synthesisMeshRef.current.setColorAt(i, color);
-              if (synthesisMeshRef.current.instanceColor) {
-                synthesisMeshRef.current.instanceColor.needsUpdate = true;
-              }
-            }
-            
-            return null;
-          })}
+          {/* Matrix updates are handled in useFrame */}
         </instancedMesh>
       )}
     </>

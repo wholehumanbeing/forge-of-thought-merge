@@ -24,6 +24,7 @@ const PlayPage = () => {
   const { archetypeSymbols, initialized, setInitialized } = useForgeStore();
   const navigate = useNavigate();
   const [errorCount, setErrorCount] = useState(0);
+  const [key, setKey] = useState(0); // Add a key to force remount the CatwalkScene
 
   useEffect(() => {
     // Check localStorage for persisted data
@@ -39,16 +40,18 @@ const PlayPage = () => {
       <ErrorBoundary 
         FallbackComponent={ErrorFallback}
         onReset={() => {
-          // Reset error count and try again
+          // Reset error count, increment key to force remount
           setErrorCount(prev => prev + 1);
+          setKey(prevKey => prevKey + 1);
+          
           // Force a clean reload if we've tried too many times
           if (errorCount >= 3) {
             window.location.reload();
           }
         }}
-        resetKeys={[errorCount]}
+        resetKeys={[errorCount, key]}
       >
-        <CatwalkScene />
+        <CatwalkScene key={key} />
       </ErrorBoundary>
     );
   }

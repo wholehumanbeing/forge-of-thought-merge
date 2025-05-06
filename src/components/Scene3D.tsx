@@ -37,10 +37,10 @@ const CatwalkFloor = () => {
           key={i} 
           ref={ref} 
           position={[0, 0, i * -1000]}
+          rotation={[-Math.PI / 2, 0, 0]} // Direct rotation prop instead of primitive
         >
           <planeGeometry args={[1000, 1000]} />
           <meshStandardMaterial color="#1a1a1f" />
-          <primitive object={new THREE.Euler(-Math.PI / 2, 0, 0)} attach="rotation" />
         </mesh>
       ))}
     </group>
