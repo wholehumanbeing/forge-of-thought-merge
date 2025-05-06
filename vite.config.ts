@@ -19,7 +19,10 @@ export default defineConfig(({ mode }) => ({
     dedupe: ['three'],            // <- Vite will never include two copies
     alias: {
       "@": path.resolve(__dirname, "./src"),
-      three: 'three'              // explicit alias for safety
+      three: path.resolve(__dirname, "./node_modules/three")  // Explicit path to three package
     }
   },
+  optimizeDeps: {
+    include: ['three']
+  }
 }));

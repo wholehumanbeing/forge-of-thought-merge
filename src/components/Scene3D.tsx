@@ -17,11 +17,20 @@ const Box = () => {
 const Scene3D = () => {
   return (
     <div className="w-full h-full">
-      <Canvas>
+      <Canvas
+        gl={{ 
+          alpha: true,
+          antialias: true,
+          powerPreference: "high-performance" 
+        }}
+        dpr={[1, 2]} // Responsive pixel ratio
+        legacy={false} // Use modern WebGLRenderer features
+      >
+        <color attach="background" args={["#101010"]} />
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} />
         <Box />
-        <OrbitControls />
+        <OrbitControls makeDefault />
       </Canvas>
     </div>
   );
