@@ -1,0 +1,187 @@
+.concept-library-panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 250px;
+  height: 100%;
+  background-color: rgba(31, 41, 55, 0.95);
+  color: #e5e7eb;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
+  border-right: 1px solid rgba(55, 65, 81, 0.7);
+  backdrop-filter: blur(4px);
+}
+
+.concept-library-panel h3 {
+  font-size: 1.1rem;
+  padding: 1rem 1rem 0.5rem;
+  margin: 0;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+  border-bottom: 1px solid rgba(55, 65, 81, 0.7);
+}
+
+.search-container {
+  position: relative;
+  padding: 0.75rem;
+}
+
+.concept-search-input {
+  width: 100%;
+  padding: 0.5rem;
+  background-color: rgba(17, 24, 39, 0.7);
+  border: 1px solid rgba(75, 85, 99, 0.6);
+  color: #e5e7eb;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.concept-search-input:focus {
+  border-color: #4f46e5;
+}
+
+.clear-search-btn {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #9ca3af;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.25rem;
+  line-height: 1;
+}
+
+.clear-search-btn:hover {
+  color: #e5e7eb;
+}
+
+.category-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  padding: 0 0.75rem 0.5rem;
+  border-bottom: 1px solid rgba(55, 65, 81, 0.7);
+}
+
+.category-tab {
+  background: none;
+  border: none;
+  color: #9ca3af;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+  border-radius: 0.25rem;
+  transition: all 0.2s;
+}
+
+.category-tab:hover {
+  background-color: rgba(55, 65, 81, 0.4);
+  color: #e5e7eb;
+}
+
+.category-tab.active {
+  background-color: #4f46e5;
+  color: white;
+}
+
+.concept-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.5rem 0;
+}
+
+.status-message, .error-message {
+  padding: 0.75rem;
+  font-size: 0.875rem;
+  color: #9ca3af;
+  text-align: center;
+  font-style: italic;
+}
+
+.error-message {
+  color: #ef4444;
+}
+
+.concept-item {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  cursor: grab;
+  border-left: 3px solid transparent;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.concept-item:hover {
+  background-color: rgba(55, 65, 81, 0.4);
+  border-left-color: #4f46e5;
+}
+
+.concept-icon {
+  margin-right: 0.5rem;
+  font-size: 1.1rem;
+  opacity: 0.8;
+}
+
+.concept-name {
+  font-size: 0.875rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Different colors for concept types */
+.concept-item.thinker {
+  border-left-color: #ec4899;
+}
+
+.concept-item.school {
+  border-left-color: #f59e0b;
+}
+
+.concept-item.metaphor {
+  border-left-color: #10b981;
+}
+
+.concept-item.concept {
+  border-left-color: #3b82f6;
+}
+
+/* For dark mode compatibility */
+@media (prefers-color-scheme: light) {
+  .concept-library-panel {
+    background-color: rgba(255, 255, 255, 0.95);
+    color: #1f2937;
+    border-right: 1px solid rgba(229, 231, 235, 0.7);
+  }
+  
+  .concept-search-input {
+    background-color: rgba(249, 250, 251, 0.7);
+    border: 1px solid rgba(209, 213, 219, 0.6);
+    color: #1f2937;
+  }
+  
+  .category-tab {
+    color: #6b7280;
+  }
+  
+  .category-tab:hover {
+    background-color: rgba(229, 231, 235, 0.4);
+    color: #1f2937;
+  }
+  
+  .status-message {
+    color: #6b7280;
+  }
+  
+  .concept-item:hover {
+    background-color: rgba(229, 231, 235, 0.4);
+  }
+} 

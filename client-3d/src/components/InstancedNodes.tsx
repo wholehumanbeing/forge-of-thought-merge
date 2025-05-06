@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { useFrame, useThree } from "@react-three/fiber";
@@ -133,24 +132,25 @@ const InstancedNodes: React.FC<InstancedNodesProps> = ({
   });
 
   useEffect(() => {
-    const handleMouseDown = () => {
+    const handleMouseDown = (event: MouseEvent) => {
+      // Require Shift key to start edge-drag mode
+      if (!event.shiftKey) return;
       if (hovered) {
-        if (onSelectNode) {
-          onSelectNode(hovered);
-        }
+        // Only begin drag if a node is currently hovered
         setDragging(hovered);
         gl.domElement.style.cursor = 'grabbing';
       }
     };
 
-    const handleMouseUp = () => {
+    const handleMouseUp = (event: MouseEvent) => {
+      // Only process edge creation if we had an active drag that began with Shift
       if (dragging && hovered && dragging !== hovered) {
-        // Create edge between dragged node and hovered node
         if (onCreateEdge) {
           onCreateEdge(dragging, hovered);
         }
       }
       setDragging(null);
+      // Restore cursor depending on current hover state
       gl.domElement.style.cursor = hovered ? 'pointer' : 'auto';
     };
 
@@ -162,7 +162,7 @@ const InstancedNodes: React.FC<InstancedNodesProps> = ({
       domElement.removeEventListener('mousedown', handleMouseDown);
       domElement.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [gl, hovered, dragging, onCreateEdge, onSelectNode]);
+  }, [gl, hovered, dragging, onCreateEdge]);
 
   // Filter nodes by type
   const conceptNodes = nodes.filter(node => node.type !== 'synthesis');
