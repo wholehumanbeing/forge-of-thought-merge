@@ -29,19 +29,19 @@ const CatwalkFloor = () => {
   });
 
   return (
-    <>
+    <group>
       {floorRefs.map((ref, i) => (
         <mesh 
           key={i} 
           ref={ref} 
-          rotation={[-Math.PI / 2, 0, 0]} 
+          rotation-x={-Math.PI / 2} 
           position={[0, 0, i * -1000]}
         >
           <planeGeometry args={[1000, 1000]} />
           <meshStandardMaterial color="#1a1a1f" />
         </mesh>
       ))}
-    </>
+    </group>
   );
 };
 
@@ -55,11 +55,10 @@ const Scene3D = () => {
           antialias: true,
           powerPreference: "high-performance" 
         }}
-        dpr={[1, 2]} // Responsive pixel ratio
-        legacy={false} // Use modern WebGLRenderer features
+        dpr={[1, 2]}
+        legacy={false}
         camera={{ position: [0, 2, 6], fov: 45 }}
         onCreated={({ gl }) => {
-          // Explicit initialization to ensure correct context
           gl.setClearColor('#101010');
         }}
       >
