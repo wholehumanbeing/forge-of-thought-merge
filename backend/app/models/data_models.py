@@ -37,6 +37,10 @@ class NodeData(BaseModel):
     type: NodeType = Field(..., description="The ontological type of the node.")
     label: str = Field(..., description="The display name or label of the node.")
     data: Dict[str, Any] = Field(default_factory=dict, description="Flexible data payload. Expected keys might include: 'description', 'position' (Dict[str, float]), 'user_notes', 'ki_confidence', etc.")
+    position: Optional[Dict[str, float]] = Field(
+        default_factory=lambda: {"x": 0.0, "y": 0.0, "z": 0.0},
+        description="3-D position of the node in the scene. If omitted, will default to x/y from legacy data and z = 0."
+    )
     ki_id: Optional[str] = Field(None, description="Optional identifier linking to a corresponding entity in the Knowledge Infrastructure graph.")
 
 class EdgeData(BaseModel):

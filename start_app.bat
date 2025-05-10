@@ -7,23 +7,27 @@ echo [.] Starting Backend Server...
 pushd backend
 if errorlevel 1 ( echo ERROR: Failed to enter backend directory. Run from project root? & pause & exit /b 1 )
 
-echo [.] Activating backend venv...
-call .venv\Scripts\activate
-if errorlevel 1 ( echo ERROR: Failed to activate backend\.venv\Scripts\activate. & popd & pause & exit /b 1 )
+echo [.] Checking backend venv exists...
+if not exist .venv\Scripts\activate.bat (
+    echo ERROR: Virtual environment not found at backend\.venv\Scripts\activate.bat
+    popd
+    pause
+    exit /b 1
+)
 
 echo [.] Launching backend (Uvicorn)...
-start "ForgeBackend" cmd /k python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+start "ForgeBackend" cmd /k ".venv\Scripts\activate.bat && python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000"
 popd
 
-echo [.] Starting Frontend Server...
-pushd frontend
-if errorlevel 1 ( echo ERROR: Failed to enter frontend directory. & pause & exit /b 1 )
+echo [.] Starting 3D Frontend Server...
+pushd client-3d
+if errorlevel 1 ( echo ERROR: Failed to enter client-3d directory. & pause & exit /b 1 )
 
-echo [.] Launching frontend (npm dev)...
-start "ForgeFrontend" cmd /k npm run dev
+echo [.] Launching 3D frontend (npm dev)...
+start "Forge3DFrontend" cmd /k npm run dev
 popd
 
-echo [.] Servers launched in separate windows titled "ForgeBackend" and "ForgeFrontend".
+echo [.] Servers launched in separate windows titled "ForgeBackend" and "Forge3DFrontend".
 echo [.] Check those windows for errors.
 echo [.] This window will close shortly.
 

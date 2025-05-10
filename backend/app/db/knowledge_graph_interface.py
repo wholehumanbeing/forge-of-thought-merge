@@ -391,26 +391,37 @@ class Neo4jKnowledgeGraph(KnowledgeGraphInterface):
 
     def search_concepts(self, query: str, limit: int = 10) -> List[NodeData]:
         """Searches for Concept nodes by name or description (case-insensitive CONTAINS).
+        If query is "*", returns all Concept nodes up to the limit.
 
         Args:
-            query: The search term.
+            query: The search term. "*" for all concepts.
             limit: Maximum number of results to return.
 
         Returns:
             A list of NodeData objects representing the found concepts.
         """
         logger.info(f"Searching concepts for query: '{query}' with limit: {limit}")
-        # TODO: Consider using a full-text index for better performance if available
-        # Example query assumes 'name' and potentially 'description' properties
-        cypher_query = """
-        MATCH (n:CONCEPT)
-        WHERE (toLower(n.name) CONTAINS toLower($query))
-           OR (n.description IS NOT NULL AND toLower(n.description) CONTAINS toLower($query))
-        RETURN n, labels(n) AS n_labels, elementId(n) as n_elementId
-        LIMIT $limit
-        """
-        parameters = {"query": query, "limit": limit}
         
+        if query == "*":
+            cypher_query = """
+            MATCH (n:CONCEPT)
+            RETURN n, labels(n) AS n_labels, elementId(n) as n_elementId
+            LIMIT $limit
+            """
+            parameters = {"limit": limit}
+        else:
+            # TODO: Consider using a full-text index for better performance if available
+            # Example query assumes 'name' and potentially 'description' properties
+            cypher_query = """
+            MATCH (n:CONCEPT)
+            WHERE (toLower(n.name) CONTAINS toLower($query))
+               OR (n.description IS NOT NULL AND toLower(n.description) CONTAINS toLower($query))
+            RETURN n, labels(n) AS n_labels, elementId(n) as n_elementId
+            LIMIT $limit
+            """
+            parameters = {"query": query, "limit": limit}
+        
+        logger.debug(f"Executing Cypher for search_concepts: {cypher_query} with params: {parameters}") # Added for debugging
         try:
             records = self._execute_query(cypher_query, parameters)
         except Neo4jError as e:

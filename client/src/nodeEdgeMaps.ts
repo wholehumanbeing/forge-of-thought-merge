@@ -1,8 +1,8 @@
-import ConceptNode   from "@/components/nodes/ConceptNode";
-import SynthesisNode from "@/components/nodes/SynthesisNode";
-import ThinkerNode   from "@/components/nodes/ThinkerNode";
-import SchoolNode    from "@/components/nodes/SchoolNode";
-import KnowledgeNode from "@/components/nodes/KnowledgeNode";
+import ConceptNode   from "@2d/components/nodes/ConceptNode";
+import SynthesisNode from "@2d/components/nodes/SynthesisNode";
+import ThinkerNode   from "@2d/components/nodes/ThinkerNode";
+import SchoolNode    from "@2d/components/nodes/SchoolNode";
+import KnowledgeNode from "@2d/components/nodes/KnowledgeNode";
 import { StraightEdge } from "reactflow";
 
 /** 

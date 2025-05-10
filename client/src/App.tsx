@@ -1,5 +1,5 @@
-import React, { useState } from 'react'; // Import useState
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Routes, Route } from 'react-router-dom';
 import Layout from './components/layout/Layout'; // We'll create this
 import CanvasPage from './pages/CanvasPage'; // We'll create this
 import { ArchetypeSelector } from './components/onboarding/ArchetypeSelector'; // Use named import
@@ -110,21 +110,19 @@ function App() {
   };
 
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          {/* Conditional Rendering based on onboarding state */}
-          <Route index element={
-            isOnboarding
-              ? <ArchetypeSelector onArchetypeSelected={handleArchetypeSelected} />
-              : <ReactFlowProvider>
-                  <CanvasPage />
-                </ReactFlowProvider>
-          } />
-          {/* Add other routes here if needed */}
-        </Route>
-      </Routes>
-    </Router>
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        {/* Conditional Rendering based on onboarding state */}
+        <Route index element={
+          isOnboarding
+            ? <ArchetypeSelector onArchetypeSelected={handleArchetypeSelected} />
+            : <ReactFlowProvider>
+                <CanvasPage />
+              </ReactFlowProvider>
+        } />
+        {/* Add other routes here if needed */}
+      </Route>
+    </Routes>
   );
 }
 

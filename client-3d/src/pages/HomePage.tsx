@@ -1,4 +1,3 @@
-
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
@@ -14,7 +13,7 @@ const HomePage = () => {
         An immersive 3D space to create, explore, and visualize your ideas
       </p>
       <Button 
-        onClick={() => navigate("/play")}
+        onClick={() => navigate("/3d")}
         className="bg-forge-primary hover:bg-forge-accent text-white font-bold py-2 px-6 rounded-lg transition-all duration-300 transform hover:scale-105"
       >
         Enter the Forge

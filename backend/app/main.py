@@ -60,6 +60,7 @@ origins = [
     "http://127.0.0.1:5173",  # Also include 127.0.0.1
     "http://localhost:5174",  # Vite dev server (Current)
     "http://127.0.0.1:5174",  # Also include 127.0.0.1 (Current)
+    "http://localhost:8080",  # Add new frontend origin
 ]
 
 # Configure CORS middleware with explicit parameters

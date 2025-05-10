@@ -1,6 +1,5 @@
-
 import { useState } from "react";
-import { Layers, Book, Link2, MapPin } from "lucide-react";
+import { Layers, Book, Link2, MapPin, Lock } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
 import {
@@ -21,10 +20,37 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { ScrollArea } from "./ui/scroll-area";
+import ViewToggle from "./ViewToggle";
+import useForgeStore, { Node } from "@/store/useForgeStore";
+import LibraryPanel from "./panels/LibraryPanel";
+import archetypeColors from "@/constants/archetypeColors";
 
-const Toolbar = () => {
+interface ToolbarProps {
+  onToggleControls?: () => void;
+  controlsLocked?: boolean;
+}
+
+const Toolbar = ({ onToggleControls, controlsLocked = false }: ToolbarProps) => {
   const [isLibraryOpen, setIsLibraryOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const addNode = useForgeStore((state) => state.addNode);
+
+  const handlePlaceNodeFromLibrary = (selectedNode: Node) => {
+    const newNode: Node = {
+      id: crypto.randomUUID(),
+      label: selectedNode.label,
+      type: selectedNode.type,
+      color: selectedNode.color || archetypeColors[selectedNode.type.toUpperCase() as keyof typeof archetypeColors] || archetypeColors.DEFAULT || "#FFFFFF",
+      pos: [
+        Math.random() * 10 - 5,
+        0,
+        Math.random() * 10 - 5,
+      ],
+      data: selectedNode.data || {},
+    };
+    addNode(newNode);
+    setIsLibraryOpen(false);
+  };
 
   return (
     <>
@@ -32,7 +58,7 @@ const Toolbar = () => {
       <div 
         className={cn(
           "fixed left-4 top-1/2 -translate-y-1/2 bg-forge-dark/70 rounded-lg p-2 transition-opacity duration-200",
-          isHovered ? "opacity-100" : "opacity-0"
+          "opacity-100"
         )}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
@@ -106,6 +132,25 @@ const Toolbar = () => {
                 <p>Minimap</p>
               </TooltipContent>
             </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button 
+                  variant={controlsLocked ? "default" : "ghost"} 
+                  size="icon" 
+                  className={cn(
+                    "hover:bg-forge-dark/50",
+                    controlsLocked && "bg-purple-600 hover:bg-purple-700"
+                  )}
+                  onClick={onToggleControls}
+                >
+                  <Lock className="h-5 w-5" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="right">
+                <p>{controlsLocked ? "Unlock Controls" : "Lock Controls"}</p>
+              </TooltipContent>
+            </Tooltip>
           </TooltipProvider>
         </div>
       </div>
@@ -117,22 +162,40 @@ const Toolbar = () => {
             <SheetTitle className="text-white">Node Library</SheetTitle>
           </SheetHeader>
           <ScrollArea className="h-[calc(100vh-5rem)] pr-4 mt-6">
-            <div className="grid grid-cols-2 gap-4">
-              {[...Array(8)].map((_, i) => (
-                <div 
-                  key={i} 
-                  className="p-4 bg-forge-dark/80 border border-white/10 rounded-lg flex items-center justify-center aspect-square hover:border-white/30 cursor-grab transition-all"
-                >
-                  <div className="w-8 h-8 rounded-full bg-purple-400/80" />
-                </div>
-              ))}
-            </div>
-            <p className="text-center text-sm text-white/50 mt-8 mb-4">
-              Drag nodes to create new concepts
-            </p>
+            <LibraryPanel onNodeSelect={handlePlaceNodeFromLibrary} />
           </ScrollArea>
         </SheetContent>
       </Sheet>
+
+      {/* View toggle pinned in header or toolbar corner */}
+      <div className="fixed top-4 right-4 z-50">
+        <ViewToggle />
+      </div>
+
+      {/* Fixed Lock Controls button */}
+      <div className="fixed bottom-4 right-4 z-50">
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button 
+                variant={controlsLocked ? "default" : "outline"} 
+                size="default" 
+                className={cn(
+                  "flex items-center gap-2",
+                  controlsLocked && "bg-purple-600 hover:bg-purple-700"
+                )}
+                onClick={onToggleControls}
+              >
+                <Lock className="h-4 w-4" />
+                {controlsLocked ? "Unlock Controls" : "Lock Controls"}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="top">
+              <p>Click to {controlsLocked ? "unlock" : "lock"} mouse pointer for WASD movement</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
     </>
   );
 };

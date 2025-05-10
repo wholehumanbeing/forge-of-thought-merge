@@ -402,18 +402,60 @@ export const getEdgeSuggestions = async (
  * @throws Throws an error if the API request fails.
  */
 export const searchConcepts = async (
-  query: string
+  query: string,
+  limit: number = 20 // Default limit
 ): Promise<NodeData[]> => {
+  console.log('[api.ts] searchConcepts called with query:', query, 'limit:', limit); // LOG 1
   try {
-    const response = await apiClient.get<NodeData[]>(
-      `/concepts/search`,
-      {
-        params: { query },
+    const params = new URLSearchParams();
+    params.append('query', query);
+    params.append('limit', String(limit));
+
+    const url = \`/concepts/search?${params.toString()}\`;
+    console.log('[api.ts] Attempting to fetch from URL:', apiClient.defaults.baseURL + url); // LOG 2
+
+    const response = await apiClient.get<NodeDTO[]>(url); // Expecting NodeDTO array based on getRandomConcept
+    
+    console.log('[api.ts] Raw response from /concepts/search:', response); // LOG 3
+    console.log('[api.ts] Raw response data from /concepts/search:', response.data); // LOG 4
+
+    // Assuming the backend returns data that's directly usable or needs minimal mapping
+    // If NodeDTO is the correct type and structure from backend for concepts,
+    // and NodeData is the expected type by the LibraryPanel,
+    // we need to ensure they are compatible or map them.
+    // For now, let's assume NodeDTO[] is compatible with NodeData[] or a direct subset.
+    // If your backend returns objects that are directly `NodeData` compliant, this is fine.
+    // If they are `NodeDTO` and need transformation to `NodeData` for the store/panel,
+    // that transformation should happen here or in the component.
+
+    // Example of a simple mapping if NodeDTO and NodeData are different:
+    // const mappedResults: NodeData[] = response.data.map(dto => ({
+    //   id: dto.id,
+    //   label: dto.label,
+    //   type: dto.type,
+    //   // ... other NodeData properties from dto
+    //   // position: { x: 0, y: 0 } // Default position if not provided by search
+    // }));
+    // console.log('[api.ts] Mapped results (if any mapping was done):', mappedResults); // LOG 5 (if mapping)
+
+    // If NodeDTO is essentially NodeData for the context of search results:
+    const results: NodeData[] = response.data.map(item => ({
+      ...item, // Spread properties from NodeDTO
+      // Ensure all properties required by NodeData are present
+      // If 'position' is required by NodeData but not in NodeDTO from search, add a default
+      position: item.position || { x: Math.random() * 400, y: Math.random() * 400 }, // Example default
+      // Ensure 'type' is correctly mapped if it's just a string from backend
+      type: item.type || NodeType.Concept, // Example default type
+      data: { // Assuming NodeData has a 'data' object for 'label', 'description' etc.
+        label: item.label,
+        // description: item.description, // if description comes from backend
       }
-    );
-    return response.data;
+    }));
+
+    console.log('[api.ts] Processed results to be returned:', results); // LOG 5 (or 6 if mapping)
+    return results;
+
   } catch (error) {
-    // Reusing the same robust error handling logic
     const isRuntimeAxiosError =
       error &&
       typeof error === 'object' &&
@@ -422,17 +464,13 @@ export const searchConcepts = async (
 
     if (isRuntimeAxiosError) {
       const axiosError = error as AxiosErrorLike;
-      console.error(`Error searching concepts for "${query}" (AxiosError):`, axiosError.response?.data || axiosError.message);
-      if (axiosError.response) {
-        throw new Error(`API Error: ${axiosError.response.status} - ${JSON.stringify(axiosError.response.data)}`);
-      } else if (axiosError.request) {
-        throw new Error('Network Error: No response received from the server.');
-      } else {
-        throw new Error(`Request Setup Error: ${axiosError.message}`);
-      }
+      console.error('[api.ts] Error fetching concepts (AxiosError):', axiosError.response?.data || axiosError.message, axiosError); // LOG 6 (or 7)
+      throw new Error(
+        `API Error searching concepts: ${axiosError.response?.status} - ${JSON.stringify(axiosError.response?.data) || axiosError.message}`
+      );
     } else {
-      console.error('An unexpected error occurred during concept search:', error);
-      throw new Error(`Unexpected Error: ${error instanceof Error ? error.message : String(error)}`);
+      console.error('[api.ts] Unexpected error fetching concepts:', error); // LOG 7 (or 8)
+      throw new Error(`Unexpected error searching concepts: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
 };

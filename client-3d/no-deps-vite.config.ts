@@ -19,17 +19,19 @@ export default defineConfig(({ mode }) => ({
     react()
   ],
   resolve: {
-    dedupe: ['three'],            // <- Vite will never include two copies
     alias: {
       "@": path.resolve(__dirname, "./src"),
       "@2d": path.resolve(__dirname, "../client/src"),
-      three: path.resolve(__dirname, "./node_modules/three")  // Explicit path to three package
+      three: path.resolve(__dirname, "./node_modules/three")
     }
   },
+  // Skip optimization altogether for development to avoid permission issues
   optimizeDeps: {
-    include: ['three'],
-    force: mode === 'development' // Only force in development mode
+    include: [],
+    entries: [],
+    exclude: ['*'],
+    force: false
   },
   // Use system temp directory for cache to avoid OneDrive and permission issues
   cacheDir: tmpDir
-}));
+})); 
