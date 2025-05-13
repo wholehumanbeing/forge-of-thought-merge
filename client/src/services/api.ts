@@ -403,16 +403,30 @@ export const getEdgeSuggestions = async (
  */
 export const searchConcepts = async (
   query: string,
-  limit: number = 20 // Default limit
+  limit: number = 20, // Default limit
+  filters?: Record<string, string | number | undefined>
 ): Promise<NodeData[]> => {
   console.log('[api.ts] searchConcepts called with query:', query, 'limit:', limit); // LOG 1
   try {
+    // params should be URLSearchParams or an object that can be converted to it
+    // Create a URLSearchParams object from the query parameters
     const params = new URLSearchParams();
-    params.append('query', query);
-    params.append('limit', String(limit));
+    if (query) params.append('query', query);
+    if (limit) params.append('limit', limit.toString());
+    if (filters) {
+      // Assuming filters is an object like { type: 'event', status: 'active' }
+      // Adjust this logic based on the actual structure of your filters
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) { // Ensure value is not undefined or null
+          params.append(key, String(value)); // Convert value to string explicitly
+        }
+      });
+    }
+    
+    // Construct the URL with query parameters
+    const url = `/concepts/search?${params.toString()}`;
 
-    const url = \`/concepts/search?${params.toString()}\`;
-    console.log('[api.ts] Attempting to fetch from URL:', apiClient.defaults.baseURL + url); // LOG 2
+    console.log(`[API] Searching concepts with URL: ${API_BASE_URL}${url}`); // Log the full URL being hit
 
     const response = await apiClient.get<NodeDTO[]>(url); // Expecting NodeDTO array based on getRandomConcept
     

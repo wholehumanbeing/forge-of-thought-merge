@@ -2,57 +2,140 @@ import { useEffect, useState } from "react";
 import ForgeScene3D from "./ForgeScene3D";
 import useForgeStore from "@/store/useForgeStore";
 import archetypeColors from "@/constants/archetypeColors";
-import { Node, Edge } from "@/store/useForgeStore";
+import { Node } from "@/types/graph";
 import IgniteFab from "./IgniteFab";
 import Toolbar from "./Toolbar";
 import { toast } from "react-hot-toast";
+import { archetypeStarterNodes } from "@/constants/archetypeStarterNodes";
+
+// Attempt to import seed data.
+// IMPORTANT: This path assumes seed_concepts_llm_generated.json has been copied to client-3d/src/data/
+// If this file is served via an API, this import needs to be replaced with an API call.
+// You may need to create the 'data' directory: client-3d/src/data/
+import seedConceptsData from "@/data/seed_concepts_llm_generated.json";
+
+// Define the structure of objects within the seed_concepts_llm_generated.json array
+interface RawSeedConceptProperties {
+  name: string;
+  description: string;
+  domain?: string; // Optional based on your JSON structure
+}
+
+interface SeedRelationship {
+  target_id: string;
+  type: string;
+  properties?: Record<string, unknown>; // Changed from any to unknown for better type safety
+}
+
+interface RawSeedConcept {
+  id: string;
+  type: string;
+  properties: RawSeedConceptProperties;
+  relationships?: SeedRelationship[]; 
+}
 
 const GalaxyScene = () => {
   const { 
-    archetypeSymbols, 
+    archetypeSymbols,
     nodes, 
-    setNodes, 
+    addNode,
     edges, 
-    setEdges,
     selectedNodeId,
-    setSelectedNodeId
+    setSelectedNodeId,
+    currentUserArchetype
   } = useForgeStore();
   const [synthesizing, setSynthesizing] = useState(false);
   const [controlsLocked, setControlsLocked] = useState(false);
 
   useEffect(() => {
-    // Only initialize nodes if none exist yet and we have archetype symbols
-    if (nodes.length === 0 && archetypeSymbols.length > 0) {
-      const starterNodes = archetypeSymbols.map((symbol, i) => ({
-        id: crypto.randomUUID(),
-        label: symbol,
-        type: 'concept',
-        color: archetypeColors[symbol] || "#FFFFFF",
-        pos: [(i - 1) * 3, 2, -8] as [number, number, number]
-      }));
-      
-      setNodes(starterNodes);
+    const allSeedConcepts = seedConceptsData as RawSeedConcept[];
+
+    if (currentUserArchetype && addNode && nodes && nodes.length === 0) {
+      toast.success(`Welcome ${currentUserArchetype} to the Forge of Thought!`, { duration: 5000 });
+
+      const starterNodesDetails = archetypeStarterNodes[currentUserArchetype];
+
+      if (starterNodesDetails) {
+        const nodesToCreate = [
+          { name: starterNodesDetails.concept, type: "CONCEPT" },
+          { name: starterNodesDetails.symbol, type: "SYMBOL" },
+          { name: starterNodesDetails.thinker, type: "THINKER" },
+        ];
+
+        nodesToCreate.forEach((nodeDetail, i) => {
+          const seedConcept = allSeedConcepts.find(
+            (sc) => sc.properties.name === nodeDetail.name && sc.type.toUpperCase() === nodeDetail.type.toUpperCase()
+          );
+
+          if (seedConcept) {
+            const newNode: Node = {
+              id: crypto.randomUUID(),
+              label: seedConcept.properties.name,
+              type: seedConcept.type, // Use the type from seed data (e.g., "CONCEPT", "SYMBOL")
+              color: archetypeColors[archetypeSymbols[0]] || "#CCCCCC", // Or a more specific color logic
+              position: [
+                (i - 1) * 6, // Spread out: e.g., -6, 0, 6 on X
+                Math.random() * 2 - 1, // Slight Y variation
+                -10 + i * 1 // Stagger depth slightly
+              ] as [number, number, number],
+              data: {
+                description: seedConcept.properties.description,
+                sourceConceptId: seedConcept.id,
+              },
+            };
+            addNode(newNode);
+          } else {
+            console.warn(
+              `Seed concept not found for ${nodeDetail.type}: ${nodeDetail.name} for archetype ${currentUserArchetype}`
+            );
+            // Optional: Create a fallback node if a seed concept isn't found
+            const fallbackNode: Node = {
+              id: crypto.randomUUID(),
+              label: nodeDetail.name, // Use the name from starterNodesDetails
+              type: nodeDetail.type.toLowerCase(), // fallback type
+              color: "#FF0000", // Red to indicate missing
+              position: [
+                (i - 1) * 6, 
+                Math.random() * 2 - 1, 
+                -10 + i * 1
+              ] as [number, number, number],
+              data: {
+                description: `Fallback node: ${nodeDetail.type} - ${nodeDetail.name} (seed data missing)`, 
+                sourceConceptId: null 
+              }
+            };
+            addNode(fallbackNode);
+          }
+        });
+      } else {
+        console.warn(`No starter node details found for archetype: ${currentUserArchetype}`);
+        // Fallback for when archetype has no defined starter nodes (should not happen with full data)
+        // You might want to add some generic nodes here or show an error
+      }
     }
-  }, [archetypeSymbols, nodes.length, setNodes]);
+  }, [currentUserArchetype, nodes, addNode, archetypeSymbols]);
 
   // Handle edge creation between nodes
-  const handleCreateEdge = (sourceId: string, targetId: string) => {
+  const handleCreateEdge = (sourceNodeId: string, targetNodeId: string) => {
     // Prevent duplicate edges
-    const edgeExists = edges.some(
-      edge => (edge.sourceId === sourceId && edge.targetId === targetId) ||
-              (edge.sourceId === targetId && edge.targetId === sourceId)
+    const edgeExists = (edges ?? []).some(
+      edge => (edge.source === sourceNodeId && edge.target === targetNodeId) ||
+              (edge.source === targetNodeId && edge.target === sourceNodeId)
     );
     
     if (!edgeExists) {
       const newEdge = {
         id: crypto.randomUUID(),
-        sourceId,
-        targetId,
-        semantic_type: 'related_to',
+        source: sourceNodeId, // Changed sourceId to source
+        target: targetNodeId, // Changed targetId to target
+        semantic_type: 'related_to', // Ensure your Edge type in store/types supports this
+        label: 'related',
         color: "#49E3F6"
       };
-      
-      setEdges([...edges, newEdge]);
+      // useForgeStore's addEdge will generate ID if not provided and handle semantic_type/label defaults
+      // The setEdges below should be replaced with addEdge from the store
+      // setEdges([...(edges ?? []), newEdge]); // Old way
+      useForgeStore.getState().addEdge(newEdge); // Correct way to add an edge via store action
     }
   };
 

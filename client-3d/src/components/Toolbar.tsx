@@ -21,7 +21,8 @@ import {
 } from "@/components/ui/popover";
 import { ScrollArea } from "./ui/scroll-area";
 import ViewToggle from "./ViewToggle";
-import useForgeStore, { Node } from "@/store/useForgeStore";
+import useForgeStore from "@/store/useForgeStore";
+import { Node } from "@/types/graph";
 import LibraryPanel from "./panels/LibraryPanel";
 import archetypeColors from "@/constants/archetypeColors";
 
@@ -41,7 +42,7 @@ const Toolbar = ({ onToggleControls, controlsLocked = false }: ToolbarProps) => 
       label: selectedNode.label,
       type: selectedNode.type,
       color: selectedNode.color || archetypeColors[selectedNode.type.toUpperCase() as keyof typeof archetypeColors] || archetypeColors.DEFAULT || "#FFFFFF",
-      pos: [
+      position: [
         Math.random() * 10 - 5,
         0,
         Math.random() * 10 - 5,
@@ -157,7 +158,7 @@ const Toolbar = ({ onToggleControls, controlsLocked = false }: ToolbarProps) => 
 
       {/* Library Drawer */}
       <Sheet open={isLibraryOpen} onOpenChange={setIsLibraryOpen}>
-        <SheetContent className="bg-forge-dark/95 border-forge-dark text-white w-80">
+        <SheetContent side="left" className="bg-forge-dark/90 border-forge-dark text-white w-72">
           <SheetHeader>
             <SheetTitle className="text-white">Node Library</SheetTitle>
           </SheetHeader>

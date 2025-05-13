@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { useFrame, useThree } from "@react-three/fiber";
 import { Tube } from "@react-three/drei";
-import { Node, Edge } from "@/store/useForgeStore";
+import { Node, Edge } from "@/types/graph";
 
 interface InstancedNodesProps {
   nodes: Node[];
@@ -31,7 +31,7 @@ const InstancedNodes: React.FC<InstancedNodesProps> = ({
   const nodePositions = React.useMemo(() => {
     const positions: Record<string, [number, number, number]> = {};
     nodes.forEach(node => {
-      positions[node.id] = node.pos;
+      positions[node.id] = node.position ?? [0, 0, 0];
     });
     return positions;
   }, [nodes]);
@@ -49,14 +49,14 @@ const InstancedNodes: React.FC<InstancedNodesProps> = ({
       // - Base scale (default 1.0 or specified in the node)
       // - Hover scale (1.1 if hovered)
       // - Selection scale (1.15 if selected)
-      let baseScale = node.scale || 1.0;
+      const baseScale = node.scale || 1.0;
       const hoverFactor = hovered === node.id ? 1.1 : 1.0;
       const selectionFactor = selectedNodeIds.includes(node.id) ? 1.15 : 1.0;
       
       const finalScale = baseScale * hoverFactor * selectionFactor;
       
       matrix.compose(
-        new THREE.Vector3(...node.pos),
+        new THREE.Vector3(...(node.position ?? [0, 0, 0])),
         new THREE.Quaternion(),
         new THREE.Vector3(finalScale, finalScale, finalScale)
       );
@@ -86,7 +86,7 @@ const InstancedNodes: React.FC<InstancedNodesProps> = ({
         const scale = node.scale || 1.0;
         
         matrix.compose(
-          new THREE.Vector3(...node.pos),
+          new THREE.Vector3(...(node.position ?? [0, 0, 0])),
           new THREE.Quaternion(),
           new THREE.Vector3(scale, scale, scale)
         );

@@ -13,7 +13,7 @@ import useForgeStore from "./store/useForgeStore";
 
 const App = () => {
   const { archetypeSymbols } = useForgeStore();
-  const hasCompletedOnboarding = archetypeSymbols.length > 0;
+  const hasCompletedOnboarding = (archetypeSymbols ?? []).length > 0;
 
   return (
     <>

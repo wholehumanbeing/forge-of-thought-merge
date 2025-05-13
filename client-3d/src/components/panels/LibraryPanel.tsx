@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Node } from '@/store/useForgeStore'; // Assuming correct path to store
-import { searchConcepts } from '@/services/api'; // Assuming correct path to api service
-import useForgeStore from '@/store/useForgeStore'; // Corrected: default import
+import { Node } from '@/types/graph';
+import { searchConcepts } from '@/services/api';
 
 interface LibraryPanelProps {
   onNodeSelect: (node: Node) => void; // Callback when a node is selected to be placed
@@ -46,9 +45,10 @@ const LibraryPanel: React.FC<LibraryPanelProps> = ({ onNodeSelect }) => {
   }, [performSearch]);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
-    // Optional: debounce search
-    // For now, search on every change or on submit
+    const newSearchTerm = event.target.value;
+    setSearchTerm(newSearchTerm);
+    // Search on every change
+    performSearch(newSearchTerm);
   };
 
   const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -115,7 +115,6 @@ const LibraryPanel: React.FC<LibraryPanelProps> = ({ onNodeSelect }) => {
           onChange={handleSearchChange}
           style={inputStyle}
         />
-        {/* <button type="submit" style={{ marginTop: '5px'}}>Search</button> */}
       </form>
       {isLoading && <p style={{ textAlign: 'center', margin: '10px 0' }}>Loading...</p>}
       {error && <p style={{ color: '#ff8a8a', margin: '10px 0' }}>Error: {error}</p>}
@@ -130,11 +129,15 @@ const LibraryPanel: React.FC<LibraryPanelProps> = ({ onNodeSelect }) => {
           <li 
             key={node.id} 
             onClick={() => handleNodeSelect(node)}
-            style={listItemStyle}
+            style={{
+              ...listItemStyle,
+              borderLeft: `4px solid ${node.color || '#ffffff'}`,
+              paddingLeft: '12px'
+            }}
             onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#4a4a4a')}
             onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
           >
-            {node.label} ({node.type})
+            {node.label} <span style={{ opacity: 0.7, fontSize: '0.85em' }}>({node.type})</span>
           </li>
         ))}
       </ul>

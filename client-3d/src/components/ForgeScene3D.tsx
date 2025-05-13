@@ -3,8 +3,9 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { OrbitControls, PointerLockControls } from "@react-three/drei";
 import * as THREE from 'three';
 import InstancedNodes from "./InstancedNodes";
-import { Node, Edge } from "@/store/useForgeStore";
+import { Node, Edge } from "@/types/graph";
 import ConceptNode from "./nodes/ConceptNode";
+import SpaceBackground from "./SpaceBackground";
 
 // WASD movement component
 const WASDControls = () => {
@@ -61,9 +62,9 @@ const WASDControls = () => {
     };
   }, []);
 
-  useFrame(() => {
+  useFrame((state, delta) => {
     // WASD movement
-    const moveSpeed = 0.15;
+    const moveSpeed = 5;
     const direction = new THREE.Vector3();
     const rotation = camera.rotation.clone();
 
@@ -83,7 +84,7 @@ const WASDControls = () => {
     if (direction.length() > 0) {
       direction.normalize();
       direction.applyEuler(new THREE.Euler(0, rotation.y, 0));
-      camera.position.addScaledVector(direction, moveSpeed);
+      camera.position.addScaledVector(direction, moveSpeed * delta);
     }
   });
 
@@ -143,15 +144,13 @@ const ForgeScene3D: React.FC<ForgeScene3DProps> = ({
         }}
         dpr={[1, 2]}
         camera={{ position: [0, 2, 6], fov: 45 }}
-        onCreated={({ gl }) => {
-          gl.setClearColor("#101010");
-        }}
       >
-        {/* Scene background */}
-        <color attach="background" args={["#101010"]} />
-        {/* Basic lighting */}
-        <ambientLight intensity={0.3} />
-        <directionalLight position={[5, 10, 5]} intensity={1} />
+        {/* Cosmic space background */}
+        <SpaceBackground starsCount={3000} depth={400} />
+
+        {/* Basic lighting - reduced intensity to fit cosmic theme */}
+        <ambientLight intensity={0.2} />
+        <directionalLight position={[5, 10, 5]} intensity={0.7} />
 
         {/* Individual ConceptNode rendering */}
         {nodes.map((node) => (

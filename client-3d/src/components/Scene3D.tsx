@@ -3,7 +3,8 @@ import { PointerLockControls } from "@react-three/drei";
 import * as THREE from 'three';
 import { useRef, useState, useEffect } from "react";
 import InstancedNodes from "./InstancedNodes";
-import { Node, Edge } from "@/store/useForgeStore";
+import { Node, Edge } from "@/types/graph";
+import SpaceBackground from "./SpaceBackground";
 
 console.log('THREE revision', THREE.REVISION); // Debug to check Three.js version
 
@@ -197,14 +198,14 @@ const Scene3D = ({
         dpr={[1, 2]}
         legacy={false}
         camera={{ position: [0, 2, 6], fov: 45 }}
-        onCreated={({ gl }) => {
-          gl.setClearColor('#101010');
-        }}
       >
-        <color attach="background" args={["#101010"]} />
+        {/* Cosmic space background */}
+        <SpaceBackground starsCount={3000} depth={400} />
+        
+        {/* Ambient and directional lighting */}
         <ambientLight intensity={0.2} />
-        <pointLight position={[10, 10, 10]} />
-        <CatwalkFloor />
+        <pointLight position={[10, 10, 10]} intensity={0.7} />
+        
         {nodes.length > 0 && (
           <InstancedNodes 
             nodes={nodes} 

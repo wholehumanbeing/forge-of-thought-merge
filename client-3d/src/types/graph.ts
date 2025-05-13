@@ -1,8 +1,16 @@
 export interface Node {
   id: string;
   label: string;
-  type: string; // e.g., 'concept', 'archetype', 'synthesized'
-  position?: [number, number, number]; // for 3D
+  type: string; // e.g., 'concept', 'archetype', 'synthesized', 'SYMBOL', 'THINKER'
+  // For 3D placement of the node in the scene (x, y, z)
+  position?: [number, number, number];
+  color?: string;
+  scale?: number;
+  data?: {
+    description?: string;
+    sourceConceptId?: string | null; // Can be null for nodes not from seed data
+    [key: string]: any; // Allows for other arbitrary data
+  };
   // Add other node-specific properties here
   vx?: number;
   vy?: number;
@@ -26,6 +34,12 @@ export interface Edge {
   target: string; // ID of the target node
   semantic_type?: string; // e.g., 'analogousTo', 'derivedFrom'
   label?: string; // Optional label for the edge
+  color?: string;
+  // Extended props used for rendering/synthesis interactions
+  sourceId?: string;
+  targetId?: string;
+  midpoint?: [number, number, number];
+  isRay?: boolean;
   // Add other edge-specific properties here
 }
 

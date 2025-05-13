@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import useForgeStore from "@/store/useForgeStore";
+import { getArchetypeName } from "@/constants/archetypeMappings"; // Assuming this exists
 
 // Import alchemical symbols
 import goldSymbol from "@/assets/symbols/gold.svg";
@@ -35,7 +36,7 @@ const alchemicalSymbols: SymbolType[] = [
 const Onboarding = () => {
   const [selectedSymbols, setSelectedSymbols] = useState<string[]>([]);
   const navigate = useNavigate();
-  const { setArchetypesFromSymbols } = useForgeStore();
+  const { setArchetypesFromSymbols, setCurrentUserArchetype, currentUserArchetype } = useForgeStore();
 
   const handleSymbolClick = (symbolId: string) => {
     setSelectedSymbols((prev) => {
@@ -53,53 +54,87 @@ const Onboarding = () => {
   };
 
   const handleSubmit = () => {
+    console.log("[Onboarding] handleSubmit triggered.");
+    console.log("[Onboarding] selectedSymbols:", selectedSymbols);
     // Call the setArchetypesFromSymbols method from the store
     setArchetypesFromSymbols(selectedSymbols);
-    // Navigate to galaxy view
+    const archetypeName = getArchetypeName(selectedSymbols);
+    console.log("[Onboarding] archetypeName from getArchetypeName:", archetypeName);
+    if (archetypeName) {
+      setCurrentUserArchetype(archetypeName);
+      console.log("[Onboarding] setCurrentUserArchetype called with:", archetypeName);
+    } else {
+      console.warn("[Onboarding] archetypeName is undefined. setCurrentUserArchetype not called.");
+    }
+    // Navigation will be handled by the new "Continue" button
+    // navigate("/galaxy");
+  };
+
+  const handleContinueToGalaxy = () => {
     navigate("/galaxy");
   };
 
+  console.log("[Onboarding] Rendering. currentUserArchetype:", currentUserArchetype);
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-forge-dark p-4">
-      <h1 className="text-3xl md:text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-forge-primary to-forge-accent">
-        Select Your Alchemical Symbols
-      </h1>
-      <p className="text-lg md:text-xl mb-8 text-center max-w-md">
-        Choose exactly three symbols that resonate with you
-      </p>
-      
-      {/* 3x3 Grid of Alchemical Symbols */}
-      <div className="grid grid-cols-3 gap-4 mb-8 max-w-lg">
-        {alchemicalSymbols.map((symbol) => (
-          <div 
-            key={symbol.id}
-            className={`
-              flex flex-col items-center justify-center cursor-pointer p-4 rounded-lg 
-              transition-all duration-300 hover:bg-forge-dark/50
-              ${selectedSymbols.includes(symbol.id) ? 'ring-2 ring-forge-accent bg-forge-dark/30' : ''}
-            `}
-            onClick={() => handleSymbolClick(symbol.id)}
-          >
-            <img 
-              src={symbol.src} 
-              alt={symbol.name} 
-              className="w-16 h-16 md:w-20 md:h-20 text-white mb-2" 
-            />
-            <span className="text-sm text-forge-light">{symbol.name}</span>
+      {!currentUserArchetype ? (
+        <>
+          <h1 className="text-3xl md:text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-forge-primary to-forge-accent">
+            Select Your Alchemical Symbols
+          </h1>
+          <p className="text-lg md:text-xl mb-8 text-center max-w-md">
+            Choose exactly three symbols that resonate with you
+          </p>
+          
+          {/* 3x3 Grid of Alchemical Symbols */}
+          <div className="grid grid-cols-3 gap-4 mb-8 max-w-lg">
+            {alchemicalSymbols.map((symbol) => (
+              <div 
+                key={symbol.id}
+                className={`
+                  flex flex-col items-center justify-center cursor-pointer p-4 rounded-lg 
+                  transition-all duration-300 hover:bg-forge-dark/50
+                  ${selectedSymbols.includes(symbol.id) ? 'ring-2 ring-forge-accent bg-forge-dark/30' : ''}
+                `}
+                onClick={() => handleSymbolClick(symbol.id)}
+              >
+                <img 
+                  src={symbol.src} 
+                  alt={symbol.name} 
+                  className="w-16 h-16 md:w-20 md:h-20 text-white mb-2" 
+                />
+                <span className="text-sm text-forge-light">{symbol.name}</span>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-      
-      <Button 
-        onClick={handleSubmit}
-        disabled={selectedSymbols.length !== 3}
-        className="bg-forge-primary hover:bg-forge-accent text-white font-bold py-2 px-6 rounded-lg transition-all duration-300 disabled:opacity-50"
-      >
-        Continue
-      </Button>
-      <p className="text-sm mt-4 text-forge-light">
-        {selectedSymbols.length}/3 symbols selected
-      </p>
+          
+          <Button 
+            onClick={handleSubmit}
+            disabled={selectedSymbols.length !== 3}
+            className="bg-forge-primary hover:bg-forge-accent text-white font-bold py-2 px-6 rounded-lg transition-all duration-300 disabled:opacity-50"
+          >
+            Reveal Archetype
+          </Button>
+          <p className="text-sm mt-4 text-forge-light">
+            {selectedSymbols.length}/3 symbols selected
+          </p>
+        </>
+      ) : (
+        <>
+          <h1 className="text-3xl md:text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-forge-primary to-forge-accent">
+            Welcome, {currentUserArchetype}!
+          </h1>
+          <p className="text-lg md:text-xl mb-8 text-center max-w-md">
+            You are ready to enter the Forge of Thought.
+          </p>
+          <Button 
+            onClick={handleContinueToGalaxy}
+            className="bg-forge-primary hover:bg-forge-accent text-white font-bold py-2 px-6 rounded-lg transition-all duration-300"
+          >
+            Continue to Forge
+          </Button>
+        </>
+      )}
     </div>
   );
 };
