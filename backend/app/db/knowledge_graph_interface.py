@@ -410,12 +410,12 @@ class Neo4jKnowledgeGraph(KnowledgeGraphInterface):
             """
             parameters = {"limit": limit}
         else:
-            # TODO: Consider using a full-text index for better performance if available
-            # Example query assumes 'name' and potentially 'description' properties
             cypher_query = """
-            MATCH (n:CONCEPT)
-            WHERE (toLower(n.name) CONTAINS toLower($query))
+            MATCH (n)
+            WHERE (n.name IS NOT NULL AND toLower(n.name) CONTAINS toLower($query))
                OR (n.description IS NOT NULL AND toLower(n.description) CONTAINS toLower($query))
+               OR (n.domain IS NOT NULL AND toLower(n.domain) CONTAINS toLower($query))
+               OR (n.aliases IS NOT NULL AND ANY(alias IN n.aliases WHERE toLower(alias) CONTAINS toLower($query)))
             RETURN n, labels(n) AS n_labels, elementId(n) as n_elementId
             LIMIT $limit
             """

@@ -11,7 +11,7 @@ class Settings(BaseSettings):
     # Application Settings
     PROJECT_NAME: str = "Forge of Thought API"
     API_V1_STR: str = "/api/v1"
-    SERVER_PORT: int = int(os.getenv("SERVER_PORT", "8000"))
+    SERVER_PORT: int = int(os.getenv("SERVER_PORT", "8001"))
 
     # Neo4j Database
     NEO4J_URI: str = os.getenv("NEO4J_URI", "bolt://localhost:7687")
@@ -25,6 +25,12 @@ class Settings(BaseSettings):
     CHROMA_COLLECTION: str = os.getenv("CHROMA_COLLECTION", "concepts")
     # Add path for persistent client
     CHROMA_DB_PATH: str = os.getenv("CHROMA_DB_PATH", "./chroma_data")
+    
+    # ChromaDB Server settings for HttpClient
+    CHROMA_SERVER_HOST: str = os.getenv("CHROMA_SERVER_HOST", "localhost")
+    CHROMA_SERVER_HTTP_PORT: int = int(os.getenv("CHROMA_SERVER_HTTP_PORT", "8000"))
+    CHROMA_DEFAULT_COLLECTION: str = os.getenv("CHROMA_DEFAULT_COLLECTION", "concepts")
+    EMBEDDING_MODEL_NAME: str = os.getenv("EMBEDDING_MODEL_NAME", "all-MiniLM-L6-v2")
 
     # LLM API Keys
     # openai_api_key: str = Field(..., env="OPENAI_API_KEY") # Commented out OpenAI key

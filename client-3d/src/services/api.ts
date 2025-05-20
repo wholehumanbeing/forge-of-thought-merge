@@ -1,7 +1,7 @@
 import { Node } from "@/store/useForgeStore"; // Assuming Node type is compatible
 
 // In Vite, environment variables are accessed via import.meta.env
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8001";
 
 interface ApiNodeData {
   id: string; // This is the primary ID from Neo4j (e.g., elementId or a custom UUID)

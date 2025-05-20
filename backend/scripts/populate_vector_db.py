@@ -4,8 +4,8 @@ import json
 import logging
 from dotenv import load_dotenv
 
-# Configure logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+# Configure logging - increase to DEBUG level
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(name)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 # Add the backend directory to the Python path
@@ -71,6 +71,12 @@ def populate_vector_database_from_json(data_file: str):
             vdb_interface = ChromaVectorDB(
                 collection_name=collection_name
             )
+            
+            # Add diagnostics about the client
+            logger.debug(f"ChromaDB Client Type: {type(vdb_interface._client)}")
+            logger.debug(f"ChromaDB Client API Impl: {vdb_interface._client._settings.chroma_api_impl if hasattr(vdb_interface._client, '_settings') else 'unknown'}")
+            logger.debug(f"ChromaDB Collection Type: {type(vdb_interface._collection)}")
+            
             # Check if the collection was successfully initialized within the constructor
             if not vdb_interface._collection: # Access internal state cautiously or rely on logs/exceptions from init
                  logger.error("ChromaDB collection could not be initialized. Aborting.")

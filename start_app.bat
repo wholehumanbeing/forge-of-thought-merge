@@ -15,8 +15,11 @@ if not exist .venv\Scripts\activate.bat (
     exit /b 1
 )
 
+echo [.] Launching ChromaDB Server...
+start "ChromaDB Server" cmd /k ".venv\Scripts\activate.bat && chroma run --path ./chroma_data --port 8000"
+
 echo [.] Launching backend (Uvicorn)...
-start "ForgeBackend" cmd /k ".venv\Scripts\activate.bat && python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000"
+start "ForgeBackend" cmd /k ".venv\Scripts\activate.bat && python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8001"
 popd
 
 echo [.] Starting 3D Frontend Server...
@@ -27,7 +30,7 @@ echo [.] Launching 3D frontend (npm dev)...
 start "Forge3DFrontend" cmd /k npm run dev
 popd
 
-echo [.] Servers launched in separate windows titled "ForgeBackend" and "Forge3DFrontend".
+echo [.] Servers launched in separate windows titled "ChromaDB Server", "ForgeBackend" and "Forge3DFrontend".
 echo [.] Check those windows for errors.
 echo [.] This window will close shortly.
 

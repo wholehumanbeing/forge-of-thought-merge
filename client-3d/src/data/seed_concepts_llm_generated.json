@@ -135,6 +135,11 @@
         "target_id": "school_buddhism",
         "type": "KEY_CONCEPT_IN",
         "properties": {}
+      },
+      {
+        "target_id": "concept_ai",
+        "type": "RELATED_TO",
+        "properties": {}
       }
     ]
   },
@@ -169,6 +174,11 @@
       },
       {
         "target_id": "concept_duality",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_ai",
         "type": "RELATED_TO",
         "properties": {}
       }
@@ -207,6 +217,11 @@
         "target_id": "concept_existence",
         "type": "RELATED_TO",
         "properties": {}
+      },
+      {
+        "target_id": "concept_general_relativity",
+        "type": "RELATED_TO",
+        "properties": {}
       }
     ]
   },
@@ -236,6 +251,11 @@
       },
       {
         "target_id": "concept_emergence",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_scientific_method",
         "type": "RELATED_TO",
         "properties": {}
       }
@@ -274,6 +294,11 @@
         "target_id": "symbol_ouroboros",
         "type": "ASSOCIATED_WITH",
         "properties": {}
+      },
+      {
+        "target_id": "concept_general_relativity",
+        "type": "RELATED_TO",
+        "properties": {}
       }
     ]
   },
@@ -303,6 +328,11 @@
       },
       {
         "target_id": "concept_quantum_entanglement",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_general_relativity",
         "type": "RELATED_TO",
         "properties": {}
       }
@@ -335,6 +365,11 @@
       {
         "target_id": "thinker_plato",
         "type": "DISCUSSED_BY",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_scientific_method",
+        "type": "RELATED_TO",
         "properties": {}
       }
     ]
@@ -441,6 +476,11 @@
       {
         "target_id": "school_stoicism",
         "type": "DISCUSSED_BY",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_democracy",
+        "type": "RELATED_TO",
         "properties": {}
       }
     ]
@@ -685,6 +725,21 @@
         "target_id": "concept_network",
         "type": "RELATED_TO",
         "properties": {}
+      },
+      {
+        "target_id": "concept_dna",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_computation",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_cybersecurity",
+        "type": "RELATED_TO",
+        "properties": {}
       }
     ]
   },
@@ -720,6 +775,16 @@
       {
         "target_id": "concept_information",
         "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_ai",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_ecosystem",
+        "type": "INSTANCE_OF",
         "properties": {}
       }
     ]
@@ -793,6 +858,21 @@
         "target_id": "symbol_tree_of_life",
         "type": "USES_METAPHOR",
         "properties": {}
+      },
+      {
+        "target_id": "concept_natural_selection",
+        "type": "KEY_MECHANISM_OF",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_dna",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "thinker_charles_darwin",
+        "type": "DISCUSSED_BY",
+        "properties": {}
       }
     ]
   },
@@ -860,6 +940,11 @@
         "target_id": "concept_causality",
         "type": "RELATED_TO",
         "properties": {}
+      },
+      {
+        "target_id": "concept_general_relativity",
+        "type": "CENTRAL_TO",
+        "properties": {}
       }
     ]
   },
@@ -925,6 +1010,16 @@
       },
       {
         "target_id": "concept_system",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_machine_learning",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_narrative",
         "type": "RELATED_TO",
         "properties": {}
       }
@@ -1330,6 +1425,13 @@
         "target_id": "symbol_tree_of_life",
         "type": "RELATED_TO",
         "properties": {}
+      },
+      {
+        "target_id": "concept_big_bang_theory",
+        "type": "RELATED_TO",
+        "properties": {
+          "comment": "Modern scientific counterpart to creation myths."
+        }
       }
     ]
   },
@@ -1361,6 +1463,11 @@
       {
         "target_id": "concept_pattern",
         "type": "INSTANCE_OF",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_narrative",
+        "type": "RELATED_TO",
         "properties": {}
       }
     ]
@@ -1429,6 +1536,13 @@
         "target_id": "concept_network",
         "type": "USES_METAPHOR",
         "properties": {}
+      },
+      {
+        "target_id": "concept_dna",
+        "type": "RELATED_TO",
+        "properties": {
+          "comment": "DNA as a molecular basis for the tree of life."
+        }
       }
     ]
   },
@@ -1458,6 +1572,16 @@
       },
       {
         "target_id": "concept_freedom_free_will",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_democracy",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_capitalism",
         "type": "RELATED_TO",
         "properties": {}
       }
@@ -1496,6 +1620,11 @@
         "target_id": "symbol_tree_of_life",
         "type": "USES_METAPHOR",
         "properties": {}
+      },
+      {
+        "target_id": "concept_internet",
+        "type": "INSTANCE_OF",
+        "properties": {}
       }
     ]
   },
@@ -1531,6 +1660,21 @@
       {
         "target_id": "concept_entropy",
         "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_ecosystem",
+        "type": "INSTANCE_OF",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_democracy",
+        "type": "INSTANCE_OF",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_capitalism",
+        "type": "INSTANCE_OF",
         "properties": {}
       }
     ]
@@ -1569,6 +1713,21 @@
         "target_id": "concept_pattern",
         "type": "USES_METAPHOR",
         "properties": {}
+      },
+      {
+        "target_id": "concept_machine_learning",
+        "type": "HAS_SUBFIELD",
+        "properties": {}
+      },
+      {
+        "target_id": "thinker_alan_turing",
+        "type": "DISCUSSED_BY",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_computation",
+        "type": "BASED_ON_AXIOM",
+        "properties": {}
       }
     ]
   },
@@ -1605,6 +1764,16 @@
         "target_id": "concept_order",
         "type": "RELATED_TO",
         "properties": {}
+      },
+      {
+        "target_id": "concept_blockchain",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_democracy",
+        "type": "RELATED_TO",
+        "properties": {}
       }
     ]
   },
@@ -1639,6 +1808,16 @@
       },
        {
         "target_id": "myth_creation",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_scientific_method",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_algorithm",
         "type": "RELATED_TO",
         "properties": {}
       }
@@ -1820,5 +1999,971 @@
         "properties": {}
       }
     ]
+  },
+  {
+    "id": "concept_scientific_method",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Scientific Method",
+      "description": "A systematic procedure for acquiring knowledge through observation, hypothesis formation, experimentation, and refinement of theories. It emphasizes empirical evidence and logical reasoning.",
+      "domain": "Science, Philosophy of Science, Epistemology"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_truth",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_causality",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_determinism",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_order",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "thinker_isaac_newton",
+        "type": "USED_BY",
+        "properties": {}
+      },
+      {
+        "target_id": "thinker_charles_darwin",
+        "type": "USED_BY",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_dna",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "DNA (Deoxyribonucleic Acid)",
+      "description": "A molecule that carries the genetic instructions used in the growth, development, functioning, and reproduction of all known living organisms and many viruses. DNA is a cornerstone of genetics and heredity.",
+      "domain": "Biology, Genetics, Biochemistry"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_evolution",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_information",
+        "type": "RELATED_TO",
+        "properties": {
+          "comment": "DNA stores genetic information."
+        }
+      },
+      {
+        "target_id": "concept_biotechnology",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "symbol_tree_of_life",
+        "type": "RELATED_TO",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_natural_selection",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Natural Selection",
+      "description": "The differential survival and reproduction of individuals due to differences in phenotype. It is a key mechanism of evolution, the change in the heritable traits characteristic of a population over generations.",
+      "domain": "Biology, Evolution"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_evolution",
+        "type": "PART_OF",
+        "properties": {}
+      },
+      {
+        "target_id": "thinker_charles_darwin",
+        "type": "DISCUSSED_BY",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_dna",
+        "type": "RELATED_TO",
+        "properties": {
+          "comment": "Genetic variation is the basis for natural selection."
+        }
+      }
+    ]
+  },
+  {
+    "id": "concept_algorithm",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Algorithm",
+      "description": "A finite sequence of well-defined, computer-implementable instructions, typically to solve a class of problems or to perform a computation. Algorithms are unambiguous specifications for performing calculation, data processing, automated reasoning, and other tasks.",
+      "domain": "Computer Science, Mathematics, Logic"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_computation",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_information",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_ai",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_machine_learning",
+        "type": "USES_FRAMEWORK",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_order",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "thinker_alan_turing",
+        "type": "DISCUSSED_BY",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_big_bang_theory",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Big Bang Theory",
+      "description": "The prevailing cosmological model explaining the origin and evolution of the universe. It states that the universe originated from an extremely hot, dense state and has been expanding and cooling ever since.",
+      "domain": "Cosmology, Physics, Astronomy"
+    },
+    "relationships": [
+      {
+        "target_id": "myth_creation",
+        "type": "RELATED_TO",
+        "properties": {
+          "comment": "Scientific counterpart to origin stories."
+        }
+      },
+      {
+        "target_id": "concept_spacetime",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_entropy",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "thinker_albert_einstein",
+        "type": "RELATED_TO",
+        "properties": {
+           "comment": "Einstein's theories provided a framework."
+        }
+      }
+    ]
+  },
+  {
+    "id": "concept_general_relativity",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "General Relativity",
+      "description": "Albert Einstein's geometric theory of gravitation published in 1915, which describes gravity not as a force but as a consequence of the curvature of spacetime caused by mass and energy.",
+      "domain": "Physics, Cosmology"
+    },
+    "relationships": [
+      {
+        "target_id": "thinker_albert_einstein",
+        "type": "DEVELOPED_BY",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_spacetime",
+        "type": "EXPLAINS",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_matter",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_causality",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_big_bang_theory",
+        "type": "RELATED_TO",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_computation",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Computation",
+      "description": "Any type of calculation or use of computing technology. Computation is a process following a well-defined model understood and expressed as, for example, an algorithm, or a protocol.",
+      "domain": "Computer Science, Mathematics, Information Theory"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_algorithm",
+        "type": "FUNDAMENTAL_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_information",
+        "type": "PROCESSES",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_ai",
+        "type": "BASED_ON",
+        "properties": {}
+      },
+      {
+        "target_id": "thinker_alan_turing",
+        "type": "PIONEERED_BY",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_machine_learning",
+        "type": "RELATED_TO",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "thinker_isaac_newton",
+    "type": "THINKER",
+    "properties": {
+      "name": "Isaac Newton",
+      "description": "An English mathematician, physicist, astronomer, theologian, and author (1643-1727) widely recognized as one ofthe most influential scientists of all time. Key contributions include laws of motion, universal gravitation, and calculus.",
+      "domain": "Physics, Mathematics, Astronomy, Philosophy of Science"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_causality",
+        "type": "DISCUSSED_BY",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_scientific_method",
+        "type": "DISCUSSED_BY",
+        "properties": {}
+      },
+      {
+        "target_id": "work_principia_mathematica_newton",
+        "type": "AUTHORED_BY",
+        "properties": {}
+      },
+      {
+        "target_id": "thinker_albert_einstein",
+        "type": "INFLUENCED",
+        "properties": { "comment": "Newton's work was foundational for Einstein."}
+      }
+    ]
+  },
+  {
+    "id": "thinker_albert_einstein",
+    "type": "THINKER",
+    "properties": {
+      "name": "Albert Einstein",
+      "description": "A German-born theoretical physicist (1879-1955) who developed the theory of relativity, one of the two pillars of modern physics. His work is also known for its influence on the philosophy of science.",
+      "domain": "Physics, Philosophy of Science"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_general_relativity",
+        "type": "DISCUSSED_BY",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_spacetime",
+        "type": "DISCUSSED_BY",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_quantum_entanglement",
+        "type": "DISCUSSED_BY",
+        "properties": { "comment": "Often critically, as in EPR paradox." }
+      },
+      {
+        "target_id": "thinker_isaac_newton",
+        "type": "INFLUENCED_BY",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "thinker_charles_darwin",
+    "type": "THINKER",
+    "properties": {
+      "name": "Charles Darwin",
+      "description": "An English naturalist, geologist and biologist (1809-1882), best known for his contributions to the science of evolution. His proposition that all species of life have descended over time from common ancestors is now widely accepted.",
+      "domain": "Biology, Natural History, Geology"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_evolution",
+        "type": "DISCUSSED_BY",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_natural_selection",
+        "type": "DISCUSSED_BY",
+        "properties": {}
+      },
+      {
+        "target_id": "work_on_the_origin_of_species",
+        "type": "AUTHORED_BY",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_scientific_method",
+        "type": "USED_BY",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "thinker_marie_curie",
+    "type": "THINKER",
+    "properties": {
+      "name": "Marie Curie",
+      "description": "A Polish and naturalized-French physicist and chemist (1867-1934) who conducted pioneering research on radioactivity. She was the first woman to win a Nobel Prize, the first person and only woman to win the Nobel Prize twice, and the only person to win the Nobel Prize in two different scientific fields.",
+      "domain": "Physics, Chemistry"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_matter",
+        "type": "RESEARCHED",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_scientific_method",
+        "type": "USED_BY",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "thinker_alan_turing",
+    "type": "THINKER",
+    "properties": {
+      "name": "Alan Turing",
+      "description": "An English mathematician, computer scientist, logician, cryptanalyst, philosopher, and theoretical biologist (1912-1954). He was highly influential in the development of theoretical computer science, providing a formalisation of the concepts of algorithm and computation with the Turing machine.",
+      "domain": "Computer Science, Mathematics, Cryptography, AI, Philosophy"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_computation",
+        "type": "DISCUSSED_BY",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_ai",
+        "type": "DISCUSSED_BY",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_algorithm",
+        "type": "DISCUSSED_BY",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_internet",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Internet",
+      "description": "A global system of interconnected computer networks that uses the Internet protocol suite (TCP/IP) to communicate between networks and devices. It is a network of networks that consists of private, public, academic, business, and government networks of local to global scope, linked by a broad array of electronic, wireless, and optical networking technologies.",
+      "domain": "Technology, Computer Science, Communication"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_network",
+        "type": "IS_A",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_information",
+        "type": "FACILITATES_EXCHANGE_OF",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_decentralization",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_cybersecurity",
+        "type": "APPLIES_TO",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_machine_learning",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Machine Learning",
+      "description": "A subfield of artificial intelligence (AI) and computer science that focuses on the use of data and algorithms to imitate the way that humans learn, gradually improving its accuracy. It enables systems to learn from data, identify patterns and make decisions with minimal human intervention.",
+      "aliases": ["ML"],
+      "domain": "Computer Science, AI, Statistics, Data Science"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_ai",
+        "type": "SUBCLASS_OF",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_algorithm",
+        "type": "USES",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_information",
+        "type": "LEARNS_FROM",
+        "properties": { "comment": "Learns from data/information." }
+      },
+      {
+        "target_id": "concept_pattern",
+        "type": "IDENTIFIES",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_computation",
+        "type": "REQUIRES",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_blockchain",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Blockchain",
+      "description": "A decentralized, distributed, and often public, digital ledger consisting of records called blocks that is used to record transactions across many computers so that any involved block cannot be altered retroactively, without the alteration of all subsequent blocks.",
+      "domain": "Technology, Computer Science, Cryptography, Finance"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_decentralization",
+        "type": "CHARACTERIZED_BY",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_network",
+        "type": "IS_A",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_information",
+        "type": "STORES",
+        "properties": { "comment": "Stores transactional information." }
+      },
+      {
+        "target_id": "concept_cybersecurity",
+        "type": "RELATED_TO",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_biotechnology",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Biotechnology",
+      "description": "The exploitation of biological processes for industrial and other purposes, especially the genetic manipulation of microorganisms for the production of antibiotics, hormones, etc. It involves using living organisms or their components to develop or create products.",
+      "domain": "Biology, Technology, Medicine, Engineering"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_dna",
+        "type": "MANIPULATES",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_evolution",
+        "type": "RELATED_TO",
+        "properties": { "comment": "Can influence or direct evolutionary processes." }
+      },
+      {
+        "target_id": "concept_scientific_method",
+        "type": "APPLIES",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_cybersecurity",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Cybersecurity",
+      "description": "The practice of protecting systems, networks, and programs from digital attacks. These cyberattacks are usually aimed at accessing, changing, or destroying sensitive information; extorting money from users; or interrupting normal business processes.",
+      "aliases": ["Information Security"],
+      "domain": "Computer Science, Technology, Information Security"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_internet",
+        "type": "PROTECTS",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_network",
+        "type": "PROTECTS",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_information",
+        "type": "PROTECTS",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_blockchain",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_ai",
+        "type": "RELATED_TO",
+        "properties": { "comment": "AI can be used for both attack and defense." }
+      }
+    ]
+  },
+  {
+    "id": "concept_renaissance",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Renaissance",
+      "description": "A period in European history marking the transition from the Middle Ages to modernity and covering the 15th and 16th centuries. It was characterized by an effort to revive and surpass ideas and achievements of classical antiquity, leading to great advancements in art, science, literature, and philosophy.",
+      "domain": "History, Art History, Cultural Period, Philosophy"
+    },
+    "relationships": [
+      {
+        "target_id": "thinker_leonardo_da_vinci",
+        "type": "FIGURE_IN",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_scientific_method",
+        "type": "RELATED_TO",
+        "properties": { "comment": "Early developments of scientific thought." }
+      },
+      {
+        "target_id": "concept_humanism",
+        "type": "KEY_PHILOSOPHY_OF",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_narrative",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Narrative",
+      "description": "A spoken or written account of connected events; a story. Narratives are fundamental to human communication, culture, and cognition, used to make sense of experience, convey information, and entertain.",
+      "domain": "Literature, Communications, Psychology, Art, Mythology"
+    },
+    "relationships": [
+      {
+        "target_id": "myth_heros_journey",
+        "type": "IS_A_TYPE_OF",
+        "properties": {}
+      },
+      {
+        "target_id": "work_hamlet",
+        "type": "IS_EXAMPLE_OF",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_pattern",
+        "type": "EXHIBITS",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_information",
+        "type": "CONVEYS",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_democracy",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Democracy",
+      "description": "A system of government by the whole population or all the eligible members of a state, typically through elected representatives. It emphasizes principles like equality, freedom, and citizen participation.",
+      "domain": "Political Science, Philosophy, Sociology, History"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_power",
+        "type": "DISTRIBUTES",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_freedom_free_will",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_decentralization",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "thinker_plato",
+        "type": "DISCUSSED_BY",
+        "properties": { "comment": "Often critically."}
+      }
+    ]
+  },
+  {
+    "id": "concept_capitalism",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Capitalism",
+      "description": "An economic and political system in which a country's trade and industry are controlled by private owners for profit, rather than by the state. Key features include capital accumulation, competitive markets, a price system, private property and the recognition of property rights, voluntary exchange and wage labor.",
+      "domain": "Economics, Political Science, Sociology, History"
+    },
+    "relationships": [
+      {
+        "target_id": "thinker_adam_smith",
+        "type": "DISCUSSED_BY",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_power",
+        "type": "RELATED_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_market",
+        "type": "CENTRAL_TO",
+        "properties": {}
+      },
+      {
+        "target_id": "work_the_wealth_of_nations",
+        "type": "ANALYZES",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "school_impressionism",
+    "type": "SCHOOL_OF_THOUGHT",
+    "properties": {
+      "name": "Impressionism",
+      "description": "A 19th-century art movement characterized by relatively small, thin, yet visible brush strokes, open composition, emphasis on accurate depiction of light in its changing qualities (often accentuating the effects of the passage of time), ordinary subject matter, inclusion of movement as a crucial element of human perception and experience, and unusual visual angles.",
+      "domain": "Art, Art History"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_renaissance",
+        "type": "CONTRASTS_WITH_APPROACH_OF",
+        "properties": { "comment": "Different artistic goals and techniques than Renaissance art." }
+      },
+      {
+        "target_id": "concept_pattern",
+        "type": "RELATED_TO",
+        "properties": {"comment": "Patterns of light and color."}
+      },
+      {
+        "target_id": "concept_illusion",
+        "type": "RELATED_TO",
+        "properties": {"comment": "Capturing fleeting visual impressions."}
+      }
+    ]
+  },
+  {
+    "id": "thinker_adam_smith",
+    "type": "THINKER",
+    "properties": {
+      "name": "Adam Smith",
+      "description": "A Scottish economist and philosopher (1723-1790) who is considered the father of modern economics. He is best known for his classic work 'The Wealth of Nations,' which advocated for free markets and the division of labor.",
+      "domain": "Economics, Philosophy"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_capitalism",
+        "type": "DISCUSSED_BY",
+        "properties": {}
+      },
+      {
+        "target_id": "work_the_wealth_of_nations",
+        "type": "AUTHORED_BY",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "thinker_leonardo_da_vinci",
+    "type": "THINKER",
+    "properties": {
+      "name": "Leonardo da Vinci",
+      "description": "An Italian polymath of the High Renaissance (1452-1519) who made pioneering discoveries in anatomy, geology, astronomy, botany, paleontology, and cartography. He is widely considered one ofthe greatest painters of all time, with works such as the Mona Lisa and The Last Supper.",
+      "aliases": ["Leonardo"],
+      "domain": "Art, Science, Engineering, Anatomy, Invention"
+    },
+    "relationships": [
+      {
+        "target_id": "concept_renaissance",
+        "type": "KEY_FIGURE_IN",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_scientific_method",
+        "type": "RELATED_TO",
+        "properties": { "comment": "Embodied empirical observation." }
+      },
+      {
+        "target_id": "school_impressionism",
+        "type": "PRECEDED",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "thinker_william_shakespeare",
+    "type": "THINKER",
+    "properties": {
+      "name": "William Shakespeare",
+      "description": "An English playwright, poet, and actor (1564-1616), widely regarded as the greatest writer in the English language and the world's greatest dramatist. His plays have been translated into every major living language and are performed more often than those of any other playwright.",
+      "aliases": ["The Bard"],
+      "domain": "Literature, Theatre, Poetry"
+    },
+    "relationships": [
+      {
+        "target_id": "work_hamlet",
+        "type": "AUTHORED_BY",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_narrative",
+        "type": "MASTER_OF",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_renaissance",
+        "type": "CONTEMPORARY_WITH",
+        "properties": { "comment": "Part of the English Renaissance." }
+      }
+    ]
+  },
+  {
+    "id": "work_the_wealth_of_nations",
+    "type": "WORK",
+    "properties": {
+      "name": "The Wealth of Nations",
+      "description": "An Inquiry into the Nature and Causes of the Wealth of Nations, generally referred to by its shortened title The Wealth of Nations, is the magnum opus of the Scottish economist and moral philosopher Adam Smith. First published in 1776, the book offers one of the world's first collected descriptions of what builds nations' wealth and is today a fundamental work in classical economics.",
+      "domain": "Economics, Philosophy",
+      "aliases": ["An Inquiry into the Nature and Causes of the Wealth of Nations"]
+    },
+    "relationships": [
+      {
+        "target_id": "thinker_adam_smith",
+        "type": "AUTHORED_BY",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_capitalism",
+        "type": "DISCUSSES",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "work_hamlet",
+    "type": "WORK",
+    "properties": {
+      "name": "Hamlet",
+      "description": "The Tragedy of Hamlet, Prince of Denmark, often shortened to Hamlet, is a tragedy written by William Shakespeare sometime between 1599 and 1601. It is Shakespeare's longest play, with 29,551 words. Set in Denmark, the play depicts Prince Hamlet and his attempts to exact revenge on his uncle, Claudius, who has murdered Hamlet's father in order to seize his throne and marry Hamlet's mother.",
+      "domain": "Literature, Theatre"
+    },
+    "relationships": [
+      {
+        "target_id": "thinker_william_shakespeare",
+        "type": "AUTHORED_BY",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_narrative",
+        "type": "IS_EXAMPLE_OF",
+        "properties": {}
+      },
+      {
+        "target_id": "archetype_hero",
+        "type": "RELATED_TO",
+        "properties": {"comment": "Hamlet as a tragic hero."}
+      },
+      {
+        "target_id": "concept_grief",
+        "type": "EXPLORES",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "work_principia_mathematica_newton",
+    "type": "WORK",
+    "properties": {
+      "name": "Philosophiæ Naturalis Principia Mathematica",
+      "description": "Often referred to as simply the Principia, is a work in three books by Isaac Newton, in Latin, first published 5 July 1687. It states Newton's laws of motion, forming the foundation of classical mechanics; Newton's law of universal gravitation; and a derivation of Kepler's laws of planetary motion.",
+      "aliases": ["Principia Mathematica (Newton)"],
+      "domain": "Physics, Mathematics, Astronomy"
+    },
+    "relationships": [
+      {
+        "target_id": "thinker_isaac_newton",
+        "type": "AUTHORED_BY",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_causality",
+        "type": "DISCUSSES",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_scientific_method",
+        "type": "EXEMPLIFIES",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "work_on_the_origin_of_species",
+    "type": "WORK",
+    "properties": {
+      "name": "On the Origin of Species",
+      "description": "A work of scientific literature by Charles Darwin that is considered to be the foundation of evolutionary biology. Published on 24 November 1859, it introduced the scientific theory that populations evolve over the course of generations through a process of natural selection.",
+      "domain": "Biology, Evolution, Science"
+    },
+    "relationships": [
+      {
+        "target_id": "thinker_charles_darwin",
+        "type": "AUTHORED_BY",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_evolution",
+        "type": "DISCUSSES",
+        "properties": {}
+      },
+      {
+        "target_id": "concept_natural_selection",
+        "type": "INTRODUCES",
+        "properties": {}
+      }
+    ]
+  },
+  {
+    "id": "concept_humanism",
+    "type": "CONCEPT",
+    "properties": {
+      "name": "Humanism",
+      "description": "A philosophical and ethical stance that emphasizes the potential and agency of human beings, preferring critical thinking and evidence (rationalism, empiricism) over acceptance of dogma or superstition. It often implies a focus on human values, concerns, and dignity.",
+      "domain": "Philosophy, Ethics, History"
+    },
+    "relationships": [
+        {
+            "target_id": "concept_renaissance",
+            "type": "KEY_PHILOSOPHY_DURING",
+            "properties": {}
+        },
+        {
+            "target_id": "concept_freedom_free_will",
+            "type": "RELATED_TO",
+            "properties": {}
+        },
+        {
+            "target_id": "concept_scientific_method",
+            "type": "ALIGNED_WITH",
+            "properties": {}
+        }
+    ]
+  },
+  {
+    "id": "concept_ecosystem",
+    "type": "CONCEPT",
+    "properties": {
+        "name": "Ecosystem",
+        "description": "A biological community of interacting organisms and their physical environment. Ecosystems include all of the living things (plants, animals, and organisms) in a given area, interacting with each other, and also with their non-living environments (weather, earth, sun, soil, climate, atmosphere).",
+        "domain": "Biology, Ecology, Environmental Science"
+    },
+    "relationships": [
+        {
+            "target_id": "concept_system",
+            "type": "IS_A",
+            "properties": {}
+        },
+        {
+            "target_id": "concept_complexity",
+            "type": "EXHIBITS",
+            "properties": {}
+        },
+        {
+            "target_id": "concept_evolution",
+            "type": "CONTEXT_FOR",
+            "properties": {}
+        },
+        {
+            "target_id": "concept_network",
+            "type": "RELATED_TO",
+            "properties": {"comment": "Food webs and species interactions form networks."}
+        }
+    ]
+  },
+  {
+      "id": "concept_market",
+      "type": "CONCEPT",
+      "properties": {
+          "name": "Market (Economics)",
+          "description": "A system or institution whereby parties engage in exchange. While parties may exchange goods and services by barter, most markets rely on sellers offering their goods or services (including labor power) in exchange for money from buyers. It can be said that a market is the process by which the prices of goods and services are established.",
+          "domain": "Economics, Sociology"
+      },
+      "relationships": [
+          {
+              "target_id": "concept_capitalism",
+              "type": "CENTRAL_MECHANISM_IN",
+              "properties": {}
+          },
+          {
+              "target_id": "concept_information",
+              "type": "RELATED_TO",
+              "properties": {"comment": "Price signals convey information."}
+          },
+          {
+              "target_id": "concept_power",
+              "type": "RELATED_TO",
+              "properties": {"comment": "Market power influences outcomes."}
+          },
+          {
+              "target_id": "thinker_adam_smith",
+              "type": "DISCUSSED_BY",
+              "properties": {}
+          }
+      ]
   }
 ]

@@ -60,7 +60,12 @@ origins = [
     "http://127.0.0.1:5173",  # Also include 127.0.0.1
     "http://localhost:5174",  # Vite dev server (Current)
     "http://127.0.0.1:5174",  # Also include 127.0.0.1 (Current)
-    "http://localhost:8080",  # Add new frontend origin
+    "http://localhost:8080",  # Frontend origin
+    "http://127.0.0.1:8080",  # Also include 127.0.0.1
+    "http://localhost:8000",  # ChromaDB server
+    "http://127.0.0.1:8000",  # Also include 127.0.0.1
+    "http://localhost:8001",  # Backend API
+    "http://127.0.0.1:8001",  # Also include 127.0.0.1
     "http://localhost:8082",  # New frontend origin
     "http://127.0.0.1:8082",  # Also include 127.0.0.1 for new origin
 ]
@@ -71,8 +76,8 @@ app.add_middleware(
     allow_origins=origins,
     allow_origin_regex=None,
     allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allow_headers=["Content-Type", "Authorization", "X-Requested-With", "Accept", "Origin"],
+    allow_methods=["*"],
+    allow_headers=["*"],
     expose_headers=["Content-Length", "Content-Type"],
     max_age=600,  # How long the results of a preflight request can be cached, in seconds
 )

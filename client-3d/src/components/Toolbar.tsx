@@ -172,31 +172,6 @@ const Toolbar = ({ onToggleControls, controlsLocked = false }: ToolbarProps) => 
       <div className="fixed top-4 right-4 z-50">
         <ViewToggle />
       </div>
-
-      {/* Fixed Lock Controls button */}
-      <div className="fixed bottom-4 right-4 z-50">
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button 
-                variant={controlsLocked ? "default" : "outline"} 
-                size="default" 
-                className={cn(
-                  "flex items-center gap-2",
-                  controlsLocked && "bg-purple-600 hover:bg-purple-700"
-                )}
-                onClick={onToggleControls}
-              >
-                <Lock className="h-4 w-4" />
-                {controlsLocked ? "Unlock Controls" : "Lock Controls"}
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="top">
-              <p>Click to {controlsLocked ? "unlock" : "lock"} mouse pointer for WASD movement</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      </div>
     </>
   );
 };

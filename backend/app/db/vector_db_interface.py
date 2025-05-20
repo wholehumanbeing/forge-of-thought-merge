@@ -11,7 +11,7 @@ from abc import ABC, abstractmethod
 from typing import List, Optional, Dict, Any, Union, Tuple
 
 import chromadb
-from chromadb.config import Settings # Import Settings
+from chromadb.config import Settings as ChromaSDKSettings  # Import correct Settings class
 
 import chromadb.utils.embedding_functions as embedding_functions
 import logging
@@ -74,52 +74,62 @@ class VectorDBInterface(ABC):
 class ChromaVectorDB(VectorDBInterface):
     """ChromaDB implementation for the Vector Database Interface."""
 
-    # Remove host and port, use collection_name from settings by default? Or keep as arg? Keep as arg for now.
     def __init__(self, collection_name: Optional[str] = None):
         self._client = None
         self._collection = None
+        self._embedding_model = None
         # Use collection name from settings if not provided, else use provided name
-        self._collection_name = collection_name if collection_name is not None else settings.CHROMA_COLLECTION
-        # Remove host and port instance variables
-        # self._host = host
-        # self._port = port
+        self.collection_name = collection_name if collection_name is not None else settings.CHROMA_DEFAULT_COLLECTION
+
+        # Initialize SentenceTransformer model for when get_embedding is called directly
+        try:
+            model_name = settings.EMBEDDING_MODEL_NAME
+            from sentence_transformers import SentenceTransformer
+            self._embedding_model = SentenceTransformer(model_name)
+            logger.info(f"Successfully loaded SentenceTransformer model: {model_name}")
+        except Exception as e:
+            logger.error(f"Failed to load SentenceTransformer model: {e}", exc_info=True)
+            raise
 
         try:
-            logger.info(f"Initializing ChromaDB PersistentClient at path: {settings.CHROMA_DB_PATH}")
+            logger.info(f"Initializing ChromaDB HttpClient to connect to: http://{settings.CHROMA_SERVER_HOST}:{settings.CHROMA_SERVER_HTTP_PORT}")
+            
+            # For HttpClient, we use minimal settings as the server handles most configuration
+            client_settings = ChromaSDKSettings()
+            # Optional tenant/database settings if needed:
+            # client_settings.chroma_default_tenant = "my_tenant"
+            # client_settings.chroma_default_database = "my_database"
 
-            # Explicitly create and configure settings
-            chroma_settings = chromadb.Settings()
-            chroma_settings.is_persistent = True
-            chroma_settings.anonymized_telemetry = False
-            # Attempt to explicitly disable HTTP mode detection
-            chroma_settings.chroma_server_host = None
-            chroma_settings.chroma_server_http_port = None
-
-            # Pass the configured settings object
-            self._client = chromadb.PersistentClient(
-                path=settings.CHROMA_DB_PATH,
-                settings=chroma_settings
+            self._client = chromadb.HttpClient(
+                host=settings.CHROMA_SERVER_HOST,
+                port=settings.CHROMA_SERVER_HTTP_PORT,
+                settings=client_settings
             )
-            # Remove heartbeat check, not needed for PersistentClient
-            # self._client.heartbeat()
-            # logger.info(f"Successfully connected to ChromaDB.") # Connection is implicit with PersistentClient
+            
+            # Check if server is reachable
+            logger.info("Attempting to ping ChromaDB server...")
+            self._client.heartbeat()
+            logger.info("ChromaDB server is reachable.")
 
-            # Use SentenceTransformerEmbeddingFunction as requested
-            # ef = embedding_functions.DefaultEmbeddingFunction()
-            self.embedding_function = embedding_functions.SentenceTransformerEmbeddingFunction(model_name="all-MiniLM-L6-v2")
-
-            logger.info(f"Getting or creating ChromaDB collection: '{self._collection_name}'")
+            # Setup embedding function
+            chroma_ef = embedding_functions.SentenceTransformerEmbeddingFunction(
+                model_name=settings.EMBEDDING_MODEL_NAME
+            )
+            
+            # Get or create collection
+            logger.info(f"Getting or creating ChromaDB collection: '{self.collection_name}'")
             self._collection = self._client.get_or_create_collection(
-                name=self._collection_name,
-                embedding_function=self.embedding_function # Pass the function instance
+                name=self.collection_name,
+                embedding_function=chroma_ef
             )
-            logger.info(f"ChromaDB collection '{self._collection_name}' ready.")
+            logger.info(f"ChromaDB collection '{self.collection_name}' via HttpClient is ready.")
 
+        except ConnectionRefusedError:
+            logger.error(f"Connection refused when trying to connect to ChromaDB server at http://{settings.CHROMA_SERVER_HOST}:{settings.CHROMA_SERVER_HTTP_PORT}. Is the server running?", exc_info=True)
+            raise
         except Exception as e:
-            logger.error(f"Error initializing ChromaDB PersistentClient or collection '{self._collection_name}': {e}", exc_info=True)
-            self._client = None # Ensure client is None if setup failed
-            self._collection = None
-            raise # Re-raise to indicate failure
+            logger.error(f"An error occurred during ChromaDB HttpClient initialization: {e}", exc_info=True)
+            raise
 
     def find_similar(self, query_text: str, n_results: int = 5, filter_metadata: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """
@@ -137,7 +147,7 @@ class ChromaVectorDB(VectorDBInterface):
             logger.error("ChromaDB collection is not initialized. Cannot perform query.")
             return {"ids": [[]], "distances": [[]], "metadatas": [[]]}
 
-        logger.debug(f"Querying ChromaDB collection '{self._collection_name}' for text: '{query_text[:50]}...', n={n_results}")
+        logger.debug(f"Querying ChromaDB collection '{self.collection_name}' for text: '{query_text[:50]}...', n={n_results}")
 
         try:
             results = self._collection.query(
@@ -198,7 +208,7 @@ class ChromaVectorDB(VectorDBInterface):
             logger.error("ChromaDB collection is not initialized. Cannot perform query.")
             return []
 
-        logger.debug(f"Querying ChromaDB collection '{self._collection_name}' for text: '{query_text[:50]}...', k={k}")
+        logger.debug(f"Querying ChromaDB collection '{self.collection_name}' for text: '{query_text[:50]}...', k={k}")
 
         try:
             results = self._collection.query(
@@ -241,35 +251,30 @@ class ChromaVectorDB(VectorDBInterface):
                         "metadata": metadata
                     })
                 logger.info(f"Successfully processed {len(resonances)} semantic resonances from ChromaDB query.")
-            else:
-                logger.info(f"ChromaDB query for '{query_text[:50]}...' returned no results.")
-            
             return resonances
-
+            
         except Exception as e:
-            logger.error(f"Error querying ChromaDB collection '{self._collection_name}': {e}", exc_info=True)
+            logger.error(f"Error in ChromaDB query for similar concepts: {e}", exc_info=True)
             return []
             
     def _calculate_similarity_from_distance(self, distance: Optional[float]) -> float:
-        """Converts a distance metric to a similarity score between 0 and 1.
+        """
+        Converts a distance value from ChromaDB to a similarity score.
         
         Args:
-            distance: The distance value from ChromaDB query
-            
+            distance: The distance value, typically between 0 and 2 for cosine distance
+                     
         Returns:
-            float: A similarity score between 0 and 1, where 1 is most similar
+            A similarity score between 0 and 1, where 1 is most similar
         """
         if distance is None:
             return 0.0
             
-        # For cosine distance (1-cosine_similarity)
-        # Since ChromaDB typically uses cosine distance by default
-        if 0 <= distance <= 2:  # Range for cosine distance
-            return 1.0 - (distance / 2.0)
-        
-        # For Euclidean (L2) distance or other unbounded metrics
-        # Use a smooth decay function that gives reasonable similarity values
-        return 1.0 / (1.0 + distance)
+        # For cosine distance:
+        # distance = 1 - similarity, so similarity = 1 - distance
+        # Distance range depends on the exact distance metric used by the embedding space
+        return max(0.0, min(1.0, 1.0 - distance))
+        # max/min ensures value is within [0,1] even if distance calculation is weird
 
 # Example usage (requires ChromaDB instance running)
 # if __name__ == '__main__':
